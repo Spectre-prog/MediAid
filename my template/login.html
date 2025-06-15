@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MediAid NG - Login</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="/static/css/styles.css">
   <style>
     /* Custom styles for the signup button */
     .account-prompt {
@@ -36,30 +36,19 @@
       color: white;
     }
 
-    /* Style for the OR divider */
-    .or-divider {
-      text-align: center;
-      margin: 15px 0;
-      color: #777;
-      position: relative;
+    .forgot-password {
+      text-align: right;
+      margin: 10px 0;
     }
 
-    .or-divider::before,
-    .or-divider::after {
-      content: "";
-      flex: 1;
-      border-bottom: 1px solid #ddd;
-      position: absolute;
-      top: 50%;
-      width: 45%;
+    .forgot-password a {
+      color: #0066cc;
+      text-decoration: none;
+      font-size: 14px;
     }
 
-    .or-divider::before {
-      right: 55%;
-    }
-
-    .or-divider::after {
-      left: 55%;
+    .forgot-password a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
@@ -77,22 +66,18 @@
         <!-- Email Login -->
         <div class="form-group">
           <label for="login-email" data-translate="login.email">Email</label>
-          <input type="email" id="login-email" data-placeholder="login.email.placeholder" placeholder="your@email.com">
-        </div>
-
-        <!-- OR Divider -->
-        <p class="or-divider" data-translate="or.divider">OR</p>
-
-        <!-- Phone Login -->
-        <div class="form-group">
-          <label for="login-phone" data-translate="login.phone">Phone Number</label>
-          <input type="tel" id="login-phone" data-placeholder="login.phone.placeholder" placeholder="08012345678">
+          <input type="email" id="login-email" data-placeholder="login.email.placeholder" placeholder="your@email.com" required>
         </div>
 
         <!-- Password -->
         <div class="form-group">
           <label for="login-password" data-translate="login.password">Password</label>
           <input type="password" id="login-password" data-placeholder="login.password.placeholder" placeholder="Enter your password" required>
+        </div>
+
+        <!-- Forgot Password Link -->
+        <div class="forgot-password">
+          <a href="forgot-password.html" data-translate="login.forgot_password">Forgot Password?</a>
         </div>
 
         <button type="submit" data-translate="login.submit">Login</button>
@@ -115,47 +100,43 @@
     </div>
   </div>
   <script>
-    // ====== LANGUAGE SYSTEM ======
+    // LANGUAGE SYSTEM
     const translations = {
       english: {
         'app.title': 'MediAid NG',
         'login.title': 'Login',
         'login.email': 'Email',
         'login.email.placeholder': 'your@email.com',
-        'login.phone': 'Phone Number',
-        'login.phone.placeholder': '08012345678',
         'login.password': 'Password',
         'login.password.placeholder': 'Enter your password',
         'login.submit': 'Login',
         'login.no_account': 'No account yet?',
         'login.signup_link': 'Sign Up',
-        'or.divider': 'OR',
+        'login.forgot_password': 'Forgot Password?',
         'ussd.button': 'No internet? Try USSD Demo',
         'ussd.demo': 'Dial *123#\n1. Login\n2. Signup\n3. Reset Password',
-        'error.login': 'Please provide email or phone and password'
+        'error.login': 'Please provide email and password'
       },
       pidgin: {
         'app.title': 'MediAid NG',
         'login.title': 'Login',
         'login.email': 'Email',
         'login.email.placeholder': 'your@email.com',
-        'login.phone': 'Phone Number',
-        'login.phone.placeholder': '08012345678',
         'login.password': 'Password',
         'login.password.placeholder': 'Put your password',
         'login.submit': 'Login',
-        'login.no_account': 'No get account?',
+        'login.no_account': 'You no get account?',
         'login.signup_link': 'Register',
-        'or.divider': 'OR',
+        'login.forgot_password': 'Forget Password?',
         'ussd.button': 'No network? Try USSD',
         'ussd.demo': 'Dial *123#\n1. Login\n2. Signup\n3. Forgot Password',
-        'error.login': 'Abeg, put email or phone and password'
+        'error.login': 'Abeg, put email and password'
       }
     };
 
     let currentLanguage = 'english';
 
-    // ====== LANGUAGE FUNCTIONS ======
+    //  LANGUAGE FUNCTIONS 
     function setLanguage(lang) {
       currentLanguage = lang;
       updateUIText();
@@ -187,21 +168,20 @@
       });
     }
 
-    // ====== LOGIN FUNCTIONS ======
+    // LOGIN FUNCTIONS
     function handleLogin(event) {
       event.preventDefault();
       const email = document.getElementById('login-email').value;
-      const phone = document.getElementById('login-phone').value;
       const password = document.getElementById('login-password').value;
 
-      // Validate that either email or phone is provided along with password
-      if ((!email && !phone) || !password) {
+      // Validate that email and password are provided
+      if (!email || !password) {
         showError(translations[currentLanguage]['error.login']);
         return;
       }
 
       // Mock login - in real app, you would call your API here
-      console.log('Login attempt with:', { email, phone });
+      console.log('Login attempt with:', { email });
       alert(currentLanguage === 'english' 
         ? 'Login successful!' 
         : 'You don login well!');
@@ -220,13 +200,13 @@
       errorBox.textContent = message;
     }
 
-    // ====== USSD DEMO ======
+    // USSD DEMO
     function toggleUSSD() {
       const ussdDemo = document.getElementById('ussd-demo');
       ussdDemo.classList.toggle('hidden');
     }
 
-    // ====== INITIALIZATION ======
+    //  INITIALIZATION
     document.addEventListener('DOMContentLoaded', function() {
       // Set up language switcher
       document.querySelectorAll('.language-switcher button').forEach(btn => {

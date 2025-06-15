@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MediAid NG - Sign Up</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="/static/css/styles.css">
   <style>
     .account-prompt {
       margin: 20px 0;
@@ -46,24 +46,23 @@
       </div>
       
       <form id="signup-form" onsubmit="handleSignup(event)">
-    
+        <!-- Personal Details -->
         <div class="form-group">
           <label for="full-name" data-translate="signup.name">Full Name</label>
           <input type="text" id="full-name" data-placeholder="signup.name.placeholder" placeholder="e.g., Adeola Musa" required>
         </div>
 
-        
+        <!-- Contact (Phone OR Email) -->
         <div class="form-group">
           <label for="phone" data-translate="signup.phone">Phone Number</label>
           <input type="tel" id="phone" data-placeholder="signup.phone.placeholder" placeholder="08012345678">
         </div>
-        <p class="or-divider">OR</p>
         <div class="form-group">
-          <label for="email" data-translate="signup.email">Email (Optional)</label>
+          <label for="email" data-translate="signup.email">Email</label>
           <input type="email" id="email" data-placeholder="signup.email.placeholder" placeholder="adeola@example.com">
         </div>
 
-        
+        <!-- Occupation -->
         <div class="form-group">
           <label for="occupation" data-translate="signup.occupation">Occupation</label>
           <select id="occupation" required>
@@ -81,7 +80,7 @@
           <input type="date" id="dob" required>
         </div>
 
-        
+        <!-- Password -->
         <div class="form-group">
           <label for="password" data-translate="signup.password">Password</label>
           <input type="password" id="password" data-placeholder="signup.password.placeholder" placeholder="At least 6 characters" required>
@@ -90,13 +89,13 @@
         <button type="submit" data-translate="signup.submit">Sign Up</button>
       </form>
 
-      
+      <!-- Already have an account? -->
       <div class="account-prompt">
         <span data-translate="login.prompt">Already have an account?</span>
         <a href="login.html" class="login-button" data-translate="login.button">Login</a>
       </div>
       
-      
+      <!-- USSD Demo -->
       <button class="text-button" onclick="toggleUSSD()" data-translate="ussd.button">No internet? Try USSD Demo</button>
       <div id="ussd-demo" class="ussd-modal hidden">
         <pre data-translate="ussd.demo">Dial *123*1# to register</pre>
@@ -104,7 +103,7 @@
     </div>
   </div>
   <script>
-    // ====== LANGUAGE SYSTEM ======
+    //  LANGUAGE SYSTEM 
     const translations = {
       english: {
         'app.title': 'MediAid NG',
@@ -113,7 +112,7 @@
         'signup.name.placeholder': 'e.g., Adeola Musa',
         'signup.phone': 'Phone Number',
         'signup.phone.placeholder': '08012345678',
-        'signup.email': 'Email (Optional)',
+        'signup.email': 'Email ',
         'signup.email.placeholder': 'adeola@example.com',
         'signup.occupation': 'Occupation',
         'signup.occupation.default': 'Select one',
@@ -140,7 +139,7 @@
         'signup.name.placeholder': 'e.g., Ade Musa',
         'signup.phone': 'Phone Number',
         'signup.phone.placeholder': '08012345678',
-        'signup.email': 'Email (No Must)',
+        'signup.email': 'Email ',
         'signup.email.placeholder': 'ade@example.com',
         'signup.occupation': 'Which work You Dey Do',
         'signup.occupation.default': 'Choose One',
@@ -148,7 +147,7 @@
         'signup.password': 'Password',
         'signup.password.placeholder': 'Small-Small 6 Letters',
         'signup.submit': 'Register',
-        'login.prompt': 'You get account?',
+        'login.prompt': 'You no get account?',
         'login.button': 'Login Here',
         'ussd.button': 'No Network? Try USSD',
         'ussd.demo': 'Dial *123*1# to register',
@@ -164,7 +163,7 @@
 
     let currentLanguage = 'english';
 
-    // ====== LANGUAGE SWITCHER ======
+    // LANGUAGE SWITCHER 
     function setLanguage(lang) {
       currentLanguage = lang;
       updateAllText();
@@ -215,7 +214,7 @@
       });
     }
 
-    // ====== FORM VALIDATION ======
+    // FORM VALIDATION
     function validateSignupForm() {
       const phone = document.getElementById('phone').value;
       const email = document.getElementById('email').value;
@@ -249,7 +248,7 @@
       errorBox.textContent = message;
     }
 
-    // ====== FORM SUBMISSION ======
+    //  FORM SUBMISSION 
     function handleSignup(event) {
       event.preventDefault();
       
@@ -281,13 +280,13 @@
       window.location.href = `otp-verify.html?phone=${encodeURIComponent(phone)}&lang=${currentLanguage}`;
     }
 
-    // ====== USSD DEMO ======
+    //  USSD DEMO
     function toggleUSSD() {
       const ussdDemo = document.getElementById('ussd-demo');
       ussdDemo.classList.toggle('hidden');
     }
 
-    // ====== INITIALIZATION ======
+    //  INITIALIZATION 
     document.addEventListener('DOMContentLoaded', function() {
       // Set up language switcher buttons
       document.querySelectorAll('.language-switcher button').forEach(btn => {

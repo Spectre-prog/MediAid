@@ -4,8 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MediAid NG - OTP Verification</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="/static/css/styles.css">
   <style>
+    /* Additional styles for OTP page */
     .resend-otp {
       margin-top: 15px;
       text-align: center;
@@ -58,6 +59,7 @@
     </div>
   </div>
   <script>
+    /* LANGUAGE SYSTEM */
     const translations = {
       english: {
         'app.title': 'MediAid NG',
@@ -87,6 +89,7 @@
 
     let currentLanguage = 'english';
 
+    /* LANGUAGE FUNCTIONS */
     function setLanguage(lang) {
       currentLanguage = lang;
       updateUIText();
@@ -118,6 +121,7 @@
       });
     }
 
+    /* OTP FUNCTIONS */
     function handleOTP(event) {
       event.preventDefault();
       const otp = document.getElementById('otp-code').value;
@@ -127,6 +131,7 @@
         return;
       }
 
+      // In a real app, you would verify the OTP with your backend here
       console.log('OTP submitted:', otp);
       alert(translations[currentLanguage]['success.otp']);
       window.location.href = 'dashboard.html';
@@ -152,13 +157,16 @@
       errorBox.textContent = message;
     }
 
+    // INITIALIZATION
     document.addEventListener('DOMContentLoaded', function() {
+      // Set up language switcher
       document.querySelectorAll('.language-switcher button').forEach(btn => {
         btn.addEventListener('click', function() {
           setLanguage(this.getAttribute('data-lang'));
         });
       });
 
+      // Get phone number from URL
       const urlParams = new URLSearchParams(window.location.search);
       const phone = urlParams.get('phone');
       const langParam = urlParams.get('lang');
@@ -166,9 +174,11 @@
       if (phone) {
         document.getElementById('user-phone').textContent = phone;
       }
-
+      
+      // Set language from URL or default to English
       setLanguage(langParam || 'english');
-
+      
+      // Auto-focus OTP input
       document.getElementById('otp-code').focus();
     });
   </script>
