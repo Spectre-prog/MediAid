@@ -1,0 +1,184 @@
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f0f8ff; 
+  margin: 0;
+  padding: 20px;
+  line-height: 1.6;
+  color: #333;
+}
+
+.container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1 {
+  color: #0066cc; 
+  margin-bottom: 20px;
+}
+
+h2 {
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+}
+
+
+.auth-form {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #444;
+}
+
+input[type="text"],
+input[type="tel"],
+input[type="email"],
+input[type="password"],
+input[type="date"],
+select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: border 0.3s;
+  box-sizing: border-box;
+}
+
+input:focus, select:focus {
+  border-color: #0066cc;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2);
+}
+
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23333'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+}
+
+button[type="submit"] {
+  background: #0066cc;
+  color: white;
+  border: none;
+  padding: 14px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.3s;
+  margin-top: 10px;
+}
+
+button[type="submit"]:hover {
+  background: #0052a3;
+}
+
+.text-button {
+  background: none;
+  border: none;
+  color: #0066cc;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0;
+  margin-top: 15px;
+  display: inline-block;
+}
+
+.language-switcher {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.language-switcher button {
+  flex: 1;
+  padding: 8px;
+  background: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.language-switcher button.active {
+  background: #0066cc;
+  color: white;
+  border-color: #0066cc;
+}
+
+
+.or-divider {
+  text-align: center;
+  margin: 15px 0;
+  color: #777;
+  position: relative;
+}
+
+.or-divider::before,
+.or-divider::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid #ddd;
+  position: absolute;
+  top: 50%;
+  width: 45%;
+}
+
+.or-divider::before {
+  right: 55%;
+}
+
+.or-divider::after {
+  left: 55%;
+}
+
+.ussd-modal {
+  background: #f8f9fa;
+  padding: 15px;
+  margin-top: 20px;
+  border-radius: 6px;
+  border: 1px dashed #0066cc;
+  font-family: 'Courier New', monospace;
+  text-align: left;
+}
+
+.ussd-modal pre {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.hidden {
+  display: none;
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 10px;
+  }
+  
+  .auth-form {
+    padding: 15px;
+  }
+  
+  input, select, button {
+    padding: 10px;
+  }
+}

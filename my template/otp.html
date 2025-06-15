@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediAid NG - OTP Verification</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .resend-otp {
+      margin-top: 15px;
+      text-align: center;
+    }
+    
+    .resend-otp button {
+      background: none;
+      border: none;
+      color: #0066cc;
+      text-decoration: underline;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    
+    .otp-input {
+      letter-spacing: 2px;
+      font-size: 18px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 data-translate="app.title">MediAid NG</h1>
+    <div class="auth-form">
+      <h2 data-translate="otp.title">Verify OTP</h2>
+      <div class="language-switcher">
+        <button class="active" data-lang="english">English</button>
+        <button data-lang="pidgin">Pidgin</button>
+      </div>
+      
+      <p id="otp-message" data-translate="otp.message">OTP sent to <span id="user-phone"></span></p>
+      
+      <form onsubmit="handleOTP(event)">
+        <div class="form-group">
+          <label for="otp-code" data-translate="otp.label">Enter OTP</label>
+          <input type="text" id="otp-code" class="otp-input" data-placeholder="otp.placeholder" 
+                 placeholder="123456" required maxlength="6" pattern="\d{6}">
+        </div>
+        
+        <button type="submit" data-translate="otp.submit">Verify</button>
+      </form>
+      
+      <div class="resend-otp">
+        <button onclick="resendOTP()" data-translate="otp.resend">Resend OTP</button>
+      </div>
+      
+      <button class="text-button" onclick="window.location.href='signup.html'" 
+              data-translate="otp.back">Back</button>
+    </div>
+  </div>
+  <script>
+    const translations = {
+      english: {
+        'app.title': 'MediAid NG',
+        'otp.title': 'Verify OTP',
+        'otp.message': 'OTP sent to',
+        'otp.label': 'Enter OTP',
+        'otp.placeholder': '123456',
+        'otp.submit': 'Verify',
+        'otp.resend': 'Resend OTP',
+        'otp.back': 'Back',
+        'error.otp': 'Please enter a valid 6-digit OTP',
+        'success.otp': 'OTP verified successfully!'
+      },
+      pidgin: {
+        'app.title': 'MediAid NG',
+        'otp.title': 'Confirm OTP',
+        'otp.message': 'We don send OTP give',
+        'otp.label': 'Put OTP',
+        'otp.placeholder': '123456',
+        'otp.submit': 'Check Am',
+        'otp.resend': 'Send OTP Again',
+        'otp.back': 'Go Back',
+        'error.otp': 'Abeg, put correct 6-number OTP',
+        'success.otp': 'OTP correct!'
+      }
+    };
+
+    let currentLanguage = 'english';
+
+    function setLanguage(lang) {
+      currentLanguage = lang;
+      updateUIText();
+      updatePlaceholders();
+      updateActiveLanguageButton();
+    }
+
+    function updateUIText() {
+      document.querySelectorAll('[data-translate]').forEach(el => {
+        const key = el.getAttribute('data-translate');
+        if (translations[currentLanguage][key]) {
+          el.textContent = translations[currentLanguage][key];
+        }
+      });
+    }
+
+    function updatePlaceholders() {
+      document.querySelectorAll('[data-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-placeholder');
+        if (translations[currentLanguage][key]) {
+          el.placeholder = translations[currentLanguage][key];
+        }
+      });
+    }
+
+    function updateActiveLanguageButton() {
+      document.querySelectorAll('.language-switcher button').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-lang') === currentLanguage);
+      });
+    }
+
+    function handleOTP(event) {
+      event.preventDefault();
+      const otp = document.getElementById('otp-code').value;
+      
+      if (otp.length !== 6 || !/^\d+$/.test(otp)) {
+        showError(translations[currentLanguage]['error.otp']);
+        return;
+      }
+
+      console.log('OTP submitted:', otp);
+      alert(translations[currentLanguage]['success.otp']);
+      window.location.href = 'dashboard.html';
+    }
+
+    function resendOTP() {
+      const phone = document.getElementById('user-phone').textContent;
+      console.log(`[MOCK] Resending OTP to ${phone}`);
+      alert(currentLanguage === 'english' 
+        ? `New OTP sent to ${phone}` 
+        : `New OTP don send give ${phone}`);
+    }
+
+    function showError(message) {
+      let errorBox = document.getElementById('error-message');
+      if (!errorBox) {
+        errorBox = document.createElement('div');
+        errorBox.id = 'error-message';
+        errorBox.style.color = 'red';
+        errorBox.style.margin = '10px 0';
+        document.querySelector('form').prepend(errorBox);
+      }
+      errorBox.textContent = message;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      document.querySelectorAll('.language-switcher button').forEach(btn => {
+        btn.addEventListener('click', function() {
+          setLanguage(this.getAttribute('data-lang'));
+        });
+      });
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const phone = urlParams.get('phone');
+      const langParam = urlParams.get('lang');
+      
+      if (phone) {
+        document.getElementById('user-phone').textContent = phone;
+      }
+
+      setLanguage(langParam || 'english');
+
+      document.getElementById('otp-code').focus();
+    });
+  </script>
+</body>
+</html>

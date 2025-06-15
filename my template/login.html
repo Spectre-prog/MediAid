@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediAid NG - Login</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Custom styles for the signup button */
+    .account-prompt {
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .account-prompt span {
+      display: block;
+      margin-bottom: 8px;
+      color: #666;
+    }
+
+    .signup-button {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #f0f8ff;
+      color: #0066cc;
+      border: 1px solid #0066cc;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: all 0.3s;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .signup-button:hover {
+      background-color: #0066cc;
+      color: white;
+    }
+
+    /* Style for the OR divider */
+    .or-divider {
+      text-align: center;
+      margin: 15px 0;
+      color: #777;
+      position: relative;
+    }
+
+    .or-divider::before,
+    .or-divider::after {
+      content: "";
+      flex: 1;
+      border-bottom: 1px solid #ddd;
+      position: absolute;
+      top: 50%;
+      width: 45%;
+    }
+
+    .or-divider::before {
+      right: 55%;
+    }
+
+    .or-divider::after {
+      left: 55%;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 data-translate="app.title">MediAid NG</h1>
+    <div class="auth-form" id="login-form">
+      <h2 data-translate="login.title">Login</h2>
+      <div class="language-switcher">
+        <button class="active" data-lang="english">English</button>
+        <button data-lang="pidgin">Pidgin</button>
+      </div>
+      
+      <form onsubmit="handleLogin(event)">
+        <!-- Email Login -->
+        <div class="form-group">
+          <label for="login-email" data-translate="login.email">Email</label>
+          <input type="email" id="login-email" data-placeholder="login.email.placeholder" placeholder="your@email.com">
+        </div>
+
+        <!-- OR Divider -->
+        <p class="or-divider" data-translate="or.divider">OR</p>
+
+        <!-- Phone Login -->
+        <div class="form-group">
+          <label for="login-phone" data-translate="login.phone">Phone Number</label>
+          <input type="tel" id="login-phone" data-placeholder="login.phone.placeholder" placeholder="08012345678">
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label for="login-password" data-translate="login.password">Password</label>
+          <input type="password" id="login-password" data-placeholder="login.password.placeholder" placeholder="Enter your password" required>
+        </div>
+
+        <button type="submit" data-translate="login.submit">Login</button>
+      </form>
+
+      <!-- Sign Up Prompt with Button -->
+      <div class="account-prompt">
+        <span data-translate="login.no_account">No account yet?</span>
+        <a href="signup.html" class="signup-button" data-translate="login.signup_link">Sign Up</a>
+      </div>
+      
+      <!-- USSD Demo -->
+      <button class="text-button" onclick="toggleUSSD()" data-translate="ussd.button">No internet? Try USSD Demo</button>
+      <div id="ussd-demo" class="ussd-modal hidden">
+        <pre data-translate="ussd.demo">Dial *123#
+1. Login
+2. Signup
+3. Reset Password</pre>
+      </div>
+    </div>
+  </div>
+  <script>
+    // ====== LANGUAGE SYSTEM ======
+    const translations = {
+      english: {
+        'app.title': 'MediAid NG',
+        'login.title': 'Login',
+        'login.email': 'Email',
+        'login.email.placeholder': 'your@email.com',
+        'login.phone': 'Phone Number',
+        'login.phone.placeholder': '08012345678',
+        'login.password': 'Password',
+        'login.password.placeholder': 'Enter your password',
+        'login.submit': 'Login',
+        'login.no_account': 'No account yet?',
+        'login.signup_link': 'Sign Up',
+        'or.divider': 'OR',
+        'ussd.button': 'No internet? Try USSD Demo',
+        'ussd.demo': 'Dial *123#\n1. Login\n2. Signup\n3. Reset Password',
+        'error.login': 'Please provide email or phone and password'
+      },
+      pidgin: {
+        'app.title': 'MediAid NG',
+        'login.title': 'Login',
+        'login.email': 'Email',
+        'login.email.placeholder': 'your@email.com',
+        'login.phone': 'Phone Number',
+        'login.phone.placeholder': '08012345678',
+        'login.password': 'Password',
+        'login.password.placeholder': 'Put your password',
+        'login.submit': 'Login',
+        'login.no_account': 'No get account?',
+        'login.signup_link': 'Register',
+        'or.divider': 'OR',
+        'ussd.button': 'No network? Try USSD',
+        'ussd.demo': 'Dial *123#\n1. Login\n2. Signup\n3. Forgot Password',
+        'error.login': 'Abeg, put email or phone and password'
+      }
+    };
+
+    let currentLanguage = 'english';
+
+    // ====== LANGUAGE FUNCTIONS ======
+    function setLanguage(lang) {
+      currentLanguage = lang;
+      updateUIText();
+      updatePlaceholders();
+      updateActiveLanguageButton();
+    }
+
+    function updateUIText() {
+      document.querySelectorAll('[data-translate]').forEach(el => {
+        const key = el.getAttribute('data-translate');
+        if (translations[currentLanguage][key]) {
+          el.textContent = translations[currentLanguage][key];
+        }
+      });
+    }
+
+    function updatePlaceholders() {
+      document.querySelectorAll('[data-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-placeholder');
+        if (translations[currentLanguage][key]) {
+          el.placeholder = translations[currentLanguage][key];
+        }
+      });
+    }
+
+    function updateActiveLanguageButton() {
+      document.querySelectorAll('.language-switcher button').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-lang') === currentLanguage);
+      });
+    }
+
+    // ====== LOGIN FUNCTIONS ======
+    function handleLogin(event) {
+      event.preventDefault();
+      const email = document.getElementById('login-email').value;
+      const phone = document.getElementById('login-phone').value;
+      const password = document.getElementById('login-password').value;
+
+      // Validate that either email or phone is provided along with password
+      if ((!email && !phone) || !password) {
+        showError(translations[currentLanguage]['error.login']);
+        return;
+      }
+
+      // Mock login - in real app, you would call your API here
+      console.log('Login attempt with:', { email, phone });
+      alert(currentLanguage === 'english' 
+        ? 'Login successful!' 
+        : 'You don login well!');
+      window.location.href = 'dashboard.html';
+    }
+
+    function showError(message) {
+      let errorBox = document.getElementById('error-message');
+      if (!errorBox) {
+        errorBox = document.createElement('div');
+        errorBox.id = 'error-message';
+        errorBox.style.color = 'red';
+        errorBox.style.margin = '10px 0';
+        document.querySelector('form').prepend(errorBox);
+      }
+      errorBox.textContent = message;
+    }
+
+    // ====== USSD DEMO ======
+    function toggleUSSD() {
+      const ussdDemo = document.getElementById('ussd-demo');
+      ussdDemo.classList.toggle('hidden');
+    }
+
+    // ====== INITIALIZATION ======
+    document.addEventListener('DOMContentLoaded', function() {
+      // Set up language switcher
+      document.querySelectorAll('.language-switcher button').forEach(btn => {
+        btn.addEventListener('click', function() {
+          setLanguage(this.getAttribute('data-lang'));
+        });
+      });
+
+      // Set language from URL or default to English
+      const urlParams = new URLSearchParams(window.location.search);
+      const langParam = urlParams.get('lang');
+      setLanguage(langParam || 'english');
+    });
+  </script>
+</body>
+</html>

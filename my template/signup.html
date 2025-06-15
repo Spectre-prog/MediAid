@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediAid NG - Sign Up</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .account-prompt {
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .account-prompt span {
+      display: block;
+      margin-bottom: 8px;
+      color: #666;
+    }
+
+    .login-button {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #f0f8ff;
+      color: #0066cc;
+      border: 1px solid #0066cc;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: all 0.3s;
+      font-size: 14px;
+    }
+
+    .login-button:hover {
+      background-color: #0066cc;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 data-translate="app.title">MediAid NG</h1>
+    <div class="auth-form">
+      <h2 data-translate="signup.title">Create Your Account</h2>
+      <div class="language-switcher">
+        <button class="active" data-lang="english">English</button>
+        <button data-lang="pidgin">Pidgin</button>
+      </div>
+      
+      <form id="signup-form" onsubmit="handleSignup(event)">
+    
+        <div class="form-group">
+          <label for="full-name" data-translate="signup.name">Full Name</label>
+          <input type="text" id="full-name" data-placeholder="signup.name.placeholder" placeholder="e.g., Adeola Musa" required>
+        </div>
+
+        
+        <div class="form-group">
+          <label for="phone" data-translate="signup.phone">Phone Number</label>
+          <input type="tel" id="phone" data-placeholder="signup.phone.placeholder" placeholder="08012345678">
+        </div>
+        <p class="or-divider">OR</p>
+        <div class="form-group">
+          <label for="email" data-translate="signup.email">Email (Optional)</label>
+          <input type="email" id="email" data-placeholder="signup.email.placeholder" placeholder="adeola@example.com">
+        </div>
+
+        
+        <div class="form-group">
+          <label for="occupation" data-translate="signup.occupation">Occupation</label>
+          <select id="occupation" required>
+            <option value="" disabled selected data-translate="signup.occupation.default">Select one</option>
+            <option value="farmer" data-translate="occupation.farmer">Farmer</option>
+            <option value="trader" data-translate="occupation.trader">Trader</option>
+            <option value="health-worker" data-translate="occupation.health-worker">Health Worker</option>
+            <option value="student" data-translate="occupation.student">Student</option>
+            <option value="other" data-translate="occupation.other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="dob" data-translate="signup.dob">Date of Birth</label>
+          <input type="date" id="dob" required>
+        </div>
+
+        
+        <div class="form-group">
+          <label for="password" data-translate="signup.password">Password</label>
+          <input type="password" id="password" data-placeholder="signup.password.placeholder" placeholder="At least 6 characters" required>
+        </div>
+
+        <button type="submit" data-translate="signup.submit">Sign Up</button>
+      </form>
+
+      
+      <div class="account-prompt">
+        <span data-translate="login.prompt">Already have an account?</span>
+        <a href="login.html" class="login-button" data-translate="login.button">Login</a>
+      </div>
+      
+      
+      <button class="text-button" onclick="toggleUSSD()" data-translate="ussd.button">No internet? Try USSD Demo</button>
+      <div id="ussd-demo" class="ussd-modal hidden">
+        <pre data-translate="ussd.demo">Dial *123*1# to register</pre>
+      </div>
+    </div>
+  </div>
+  <script>
+    // ====== LANGUAGE SYSTEM ======
+    const translations = {
+      english: {
+        'app.title': 'MediAid NG',
+        'signup.title': 'Create Your Account',
+        'signup.name': 'Full Name',
+        'signup.name.placeholder': 'e.g., Adeola Musa',
+        'signup.phone': 'Phone Number',
+        'signup.phone.placeholder': '08012345678',
+        'signup.email': 'Email (Optional)',
+        'signup.email.placeholder': 'adeola@example.com',
+        'signup.occupation': 'Occupation',
+        'signup.occupation.default': 'Select one',
+        'signup.dob': 'Date of Birth',
+        'signup.password': 'Password',
+        'signup.password.placeholder': 'At least 6 characters',
+        'signup.submit': 'Sign Up',
+        'login.prompt': 'Already have an account?',
+        'login.button': 'Login',
+        'ussd.button': 'No internet? Try USSD Demo',
+        'ussd.demo': 'Dial *123*1# to register',
+        'occupation.farmer': 'Farmer',
+        'occupation.trader': 'Trader',
+        'occupation.health-worker': 'Health Worker',
+        'occupation.student': 'Student',
+        'occupation.other': 'Other',
+        'error.phone_email': 'Please provide either phone or email!',
+        'error.password': 'Password too short (min 6 characters)'
+      },
+      pidgin: {
+        'app.title': 'MediAid NG',
+        'signup.title': 'Make Your Account',
+        'signup.name': 'Your Full Name',
+        'signup.name.placeholder': 'e.g., Ade Musa',
+        'signup.phone': 'Phone Number',
+        'signup.phone.placeholder': '08012345678',
+        'signup.email': 'Email (No Must)',
+        'signup.email.placeholder': 'ade@example.com',
+        'signup.occupation': 'Which work You Dey Do',
+        'signup.occupation.default': 'Choose One',
+        'signup.dob': 'When dem born you',
+        'signup.password': 'Password',
+        'signup.password.placeholder': 'Small-Small 6 Letters',
+        'signup.submit': 'Register',
+        'login.prompt': 'You get account?',
+        'login.button': 'Login Here',
+        'ussd.button': 'No Network? Try USSD',
+        'ussd.demo': 'Dial *123*1# to register',
+        'occupation.farmer': 'Farmer',
+        'occupation.trader': 'Market Person',
+        'occupation.health-worker': 'Hospital Worker',
+        'occupation.student': 'Student',
+        'occupation.other': 'Others',
+        'error.phone_email': 'Abeg, put phone or email!',
+        'error.password': 'Password no reach 6 letters!'
+      }
+    };
+
+    let currentLanguage = 'english';
+
+    // ====== LANGUAGE SWITCHER ======
+    function setLanguage(lang) {
+      currentLanguage = lang;
+      updateAllText();
+      updatePlaceholders();
+      updateOccupationOptions();
+      updateActiveButton(lang);
+    }
+
+    function updateAllText() {
+      // Update all elements with data-translate attribute
+      document.querySelectorAll('[data-translate]').forEach(el => {
+        const key = el.getAttribute('data-translate');
+        if (translations[currentLanguage][key]) {
+          el.textContent = translations[currentLanguage][key];
+        }
+      });
+    }
+
+    function updatePlaceholders() {
+      // Update input placeholders
+      document.querySelectorAll('[data-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-placeholder');
+        if (translations[currentLanguage][key]) {
+          el.placeholder = translations[currentLanguage][key];
+        }
+      });
+    }
+
+    function updateOccupationOptions() {
+      // Update select options
+      const occupationSelect = document.getElementById('occupation');
+      if (occupationSelect) {
+        const options = occupationSelect.querySelectorAll('option');
+        options.forEach(option => {
+          if (option.hasAttribute('data-translate')) {
+            const key = option.getAttribute('data-translate');
+            if (translations[currentLanguage][key]) {
+              option.textContent = translations[currentLanguage][key];
+            }
+          }
+        });
+      }
+    }
+
+    function updateActiveButton(lang) {
+      document.querySelectorAll('.language-switcher button').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+      });
+    }
+
+    // ====== FORM VALIDATION ======
+    function validateSignupForm() {
+      const phone = document.getElementById('phone').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      // At least phone OR email must be provided
+      if (!phone && !email) {
+        showError(translations[currentLanguage]['error.phone_email']);
+        return false;
+      }
+
+      // Password length check
+      if (password.length < 6) {
+        showError(translations[currentLanguage]['error.password']);
+        return false;
+      }
+
+      return true; // Validation passed
+    }
+
+    function showError(message) {
+      // Create or reuse error display element
+      let errorBox = document.getElementById('error-message');
+      if (!errorBox) {
+        errorBox = document.createElement('div');
+        errorBox.id = 'error-message';
+        errorBox.style.color = 'red';
+        errorBox.style.margin = '10px 0';
+        document.querySelector('form').prepend(errorBox);
+      }
+      errorBox.textContent = message;
+    }
+
+    // ====== FORM SUBMISSION ======
+    function handleSignup(event) {
+      event.preventDefault();
+      
+      if (!validateSignupForm()) return;
+
+      // Gather form data
+      const userData = {
+        name: document.getElementById('full-name').value,
+        phone: document.getElementById('phone').value,
+        email: document.getElementById('email').value,
+        occupation: document.getElementById('occupation').value,
+        dob: document.getElementById('dob').value,
+        language: currentLanguage
+      };
+
+      console.log('Submitting:', userData); // For debugging
+      
+      // Simulate API call (in real app, use fetch())
+      setTimeout(() => {
+        simulateOTPSend(userData.phone);
+      }, 1000);
+    }
+
+    function simulateOTPSend(phone) {
+      console.log(`[MOCK] OTP sent to ${phone}`);
+      alert(translations[currentLanguage]['ussd.demo']);
+      
+      // Redirect to OTP page with phone number
+      window.location.href = `otp-verify.html?phone=${encodeURIComponent(phone)}&lang=${currentLanguage}`;
+    }
+
+    // ====== USSD DEMO ======
+    function toggleUSSD() {
+      const ussdDemo = document.getElementById('ussd-demo');
+      ussdDemo.classList.toggle('hidden');
+    }
+
+    // ====== INITIALIZATION ======
+    document.addEventListener('DOMContentLoaded', function() {
+      // Set up language switcher buttons
+      document.querySelectorAll('.language-switcher button').forEach(btn => {
+        btn.addEventListener('click', function() {
+          setLanguage(this.getAttribute('data-lang'));
+        });
+      });
+      
+      // Initialize with English
+      setLanguage('english');
+    });
+  </script>
+</body>
+</html>
