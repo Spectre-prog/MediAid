@@ -1,46 +1,86 @@
-body {
-  font-family: 'Arial', sans-serif;
-  background-color: #f0f8ff; 
-  margin: 0;
-  padding: 20px;
-  line-height: 1.6;
-  color: #333;
+:root {
+  --primary: #0ef;
+  --dark-blue: #1d3557;
+  --black: #0a0a0a;
+  --light-gray: #f9f9f9;
+  --white-transparent: #ffffffcc;
+  --white: #ffffff;
+  --glass: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.2);
 }
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--black);
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+  color: var(--white);
+  min-height: 100vh;
+}
+
+/* Guys lemme know what you think about this background */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: linear-gradient(-45deg, #0a0a0a, #1d3557, #0a0a0a, #1d3557);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+  opacity: 0.8;
+}
+
 
 .container {
   max-width: 500px;
-  margin: 0 auto;
+  margin: 2rem auto;
   padding: 20px;
 }
 
 h1 {
-  color: #0066cc; 
+  color: var(--primary);
   margin-bottom: 20px;
+  font-family: 'Playfair Display', serif;
+  text-align: center;
+  text-shadow: 0 0 8px rgba(0, 238, 255, 0.3);
 }
 
 h2 {
-  color: #333;
+  color: var(--white);
   margin-bottom: 20px;
   font-size: 1.5rem;
+  font-weight: 500;
 }
 
-
 .auth-form {
-  background: white;
-  padding: 25px;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: var(--glass);
+    -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  padding: 30px;
+  border-radius: 12px;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 0 20px rgba(0, 238, 255, 0.1);
 }
 
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 label {
   display: block;
-  margin-bottom: 8px;
-  font-weight: 600;
-  color: #444;
+  margin-bottom: 10px;
+  font-weight: 500;
+  color: var(--white-transparent);
 }
 
 input[type="text"],
@@ -50,93 +90,111 @@ input[type="password"],
 input[type="date"],
 select {
   width: 100%;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
   font-size: 16px;
-  transition: border 0.3s;
+  transition: all 0.3s ease;
   box-sizing: border-box;
+  color: var(--white);
 }
 
-input:focus, select:focus {
-  border-color: #0066cc;
+input:focus, 
+select:focus {
+  border-color: var(--primary);
   outline: none;
-  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2);
+  box-shadow: 0 0 0 3px rgba(0, 238, 255, 0.2);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 select {
   appearance: none;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23333'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ffffffcc'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 10px center;
+  background-position: right 15px center;
   background-size: 16px;
 }
 
 button[type="submit"] {
-  background: #0066cc;
-  color: white;
+  background: linear-gradient(45deg, var(--primary), #00c8ff);
+  color: var(--dark-blue);
   border: none;
-  padding: 14px;
-  border-radius: 6px;
+  padding: 16px;
+  border-radius: 8px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
   width: 100%;
-  transition: background 0.3s;
-  margin-top: 10px;
+  transition: all 0.3s ease;
+  margin-top: 15px;
+  box-shadow: 0 0 15px rgba(0, 238, 255, 0.3);
 }
 
 button[type="submit"]:hover {
-  background: #0052a3;
+  transform: translateY(-2px);
+  box-shadow: 0 0 25px rgba(0, 238, 255, 0.5);
 }
 
 .text-button {
   background: none;
   border: none;
-  color: #0066cc;
-  text-decoration: underline;
+  color: var(--primary);
+  text-decoration: none;
   cursor: pointer;
   font-size: 14px;
   padding: 0;
   margin-top: 15px;
   display: inline-block;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.text-button:hover {
+  text-shadow: 0 0 8px rgba(0, 238, 255, 0.5);
 }
 
 .language-switcher {
   display: flex;
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .language-switcher button {
   flex: 1;
-  padding: 8px;
-  background: #f0f0f0;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  padding: 10px;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: 6px;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.3s ease;
+  color: var(--white-transparent);
 }
 
 .language-switcher button.active {
-  background: #0066cc;
-  color: white;
-  border-color: #0066cc;
+  background: var(--primary);
+  color: var(--dark-blue);
+  border-color: var(--primary);
+  font-weight: 600;
 }
 
+.language-switcher button:hover {
+  background: rgba(0, 238, 255, 0.1);
+}
 
 .or-divider {
   text-align: center;
-  margin: 15px 0;
-  color: #777;
+  margin: 25px 0;
+  color: var(--white-transparent);
   position: relative;
+  font-size: 14px;
 }
 
 .or-divider::before,
 .or-divider::after {
   content: "";
   flex: 1;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--glass-border);
   position: absolute;
   top: 50%;
   width: 45%;
@@ -151,34 +209,65 @@ button[type="submit"]:hover {
 }
 
 .ussd-modal {
-  background: #f8f9fa;
-  padding: 15px;
-  margin-top: 20px;
-  border-radius: 6px;
-  border: 1px dashed #0066cc;
+  background: rgba(0, 56, 87, 0.3);
+  padding: 20px;
+  margin-top: 25px;
+  border-radius: 8px;
+  border: 1px dashed var(--primary);
   font-family: 'Courier New', monospace;
   text-align: left;
+  color: var(--primary);
 }
 
 .ussd-modal pre {
   margin: 0;
   white-space: pre-wrap;
+  line-height: 1.5;
 }
 
 .hidden {
   display: none;
 }
 
-@media (max-width: 480px) {
+/* Animation for form elements */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.form-group {
+  animation: fadeIn 0.5s ease forwards;
+  opacity: 0;
+}
+
+.form-group:nth-child(1) { animation-delay: 0.1s; }
+.form-group:nth-child(2) { animation-delay: 0.2s; }
+.form-group:nth-child(3) { animation-delay: 0.3s; }
+.form-group:nth-child(4) { animation-delay: 0.4s; }
+.form-group:nth-child(5) { animation-delay: 0.5s; }
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
   .container {
-    padding: 10px;
+    padding: 15px;
+    margin: 1rem auto;
   }
   
   .auth-form {
-    padding: 15px;
+    padding: 20px;
   }
   
   input, select, button {
-    padding: 10px;
+    padding: 12px;
+  }
+  
+  h1 {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .language-switcher {
+    flex-direction: column;
   }
 }
