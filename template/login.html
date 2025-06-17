@@ -7,6 +7,9 @@
   <link rel="icon" href="../static/img/icon.png">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <link rel="stylesheet" href="/static/css/styles.css">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+      <script src="https://cdn.tailwindcss.com"></script>
+
   <style>
     /* Custom styles for the signup button */
     .account-prompt {
@@ -78,11 +81,18 @@
   </style>
 </head>
 <body>
+  <nav class="py-6 px-4 md:px-12 lg:px-24 flex justify-between items-center">
+        <a href="./home.html" class="flex items-center">
+    <span class="text-3xl font-bold text-white mr-2 glow-text">
+        Medi<span class="text-[#0ef]">Aid</span>
+    </span>
+    <i class="fa-solid fa-heart-pulse text-[#0ef] text-3xl ml-2"></i> 
+</a>
+    </nav>
   <!-- I did the same for our login too, CyberCoder -->
   <div class="neon-ball left-ball"></div>
 <div class="neon-ball right-ball"></div>
-  <div class="container">
-    <h1 data-translate="app.title">MediAid NG</h1>
+  <div class="cont">
     <div class="auth-form" id="login-form">
       <h2 data-translate="login.title">Login</h2>
       <div class="language-switcher">
