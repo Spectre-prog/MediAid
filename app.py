@@ -1,7 +1,9 @@
 from flask import Flask, flash, session, render_template, redirect, url_for, request, jsonify
 from cloudinary.uploader import upload
-from config import Config  # Import Config class from config.py
+from config import Config
 from models import db, User, InsuranceDocument
+import json
+import os
 
 # Initialize Flask application
 app = Flask(__name__, template_folder='template', static_folder='static')
@@ -14,7 +16,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = Config.SQLALCHEMY_TRACK_MODIFICAT
 db.init_app(app)
 
 # Secret key for session management (required for flash messages), you can decide to remove them.
-app.secret_key = Config.SECRET_KEY  # Secret key from Config class loaded from .env
+app.secret_key = os.environ.get('SECRET_KEY')  # Secret key from .env file
 
 # Route handler for the home page
 @app.route('/')
@@ -131,6 +133,30 @@ def logout():
     flash('You have been logged out', 'info')
     return redirect(url_for('home'))
 
+# route for AI testing interface
+@app.route('/ai-test', methods=['GET', 'POST'])
+def ai_test():
+    if request.method == 'POST':
+        if 'document' not in request.files:
+            return jsonify({'error': 'No document uploaded'}), 400
+            
+        file = request.files['document']
+        if file.filename == '':
+            return jsonify({'error': 'No selected file'}), 400
+            
+        if file:
+            try:
+                # to be worked on ai doc processing
+                result = {
+                    'filename': file.filename,
+                    'analysis': 'Analysis of your insurance document...'  # actual AI analysis
+                }
+                return jsonify(result)
+            except Exception as e:
+                return jsonify({'error': str(e)}), 500
+                
+    return render_template('ai_test.html')
+
 # Run the application
 if __name__ == '__main__':
     with app.app_context():
@@ -171,6 +197,13 @@ if __name__ == '__main__':
 #     - Clears user session
 #     - Redirects to home page
 #     - Shows logout confirmation message
+# /ai-test (GET, POST)
+#     - AI testing interface route
+#     - GET: Displays AI testing form
+#     - POST: Processes uploaded document and analyzes it using AI
+#     - Accepts: document file
+#     - Redirects back to form on error
+#     - Displays analysis result on success
 # Note: All form submissions should use POST method
 #       All page views should use GET method
 # For CyberCoder
