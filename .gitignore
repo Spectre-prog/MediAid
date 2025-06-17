@@ -1,2 +1,4 @@
 .env
 /mediaidvenv
+.venv
+__pycache__/
