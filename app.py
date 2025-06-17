@@ -127,3 +127,39 @@ if __name__ == '__main__':
         db.create_all()
     # Start development server    
     app.run(debug=True)
+
+
+# Frontend Route Guide:
+# -------------------
+# / (GET)
+#     - Home page route
+#     - Displays the main landing page
+#     - Public access
+# /login (GET, POST)
+#     - User authentication route
+#     - GET: Shows login form
+#     - POST: Processes login credentials
+#     - Accepts: email, password
+#     - Redirects to dashboard on success
+#     - Shows error message on failure
+# /signup (GET, POST)
+#     - New user registration route
+#     - GET: Shows registration form
+#     - POST: Processes new user registration
+#     - Accepts: full-name, email, password
+#     - Redirects to login page on success
+#     - Shows error if email already exists
+# /dashboard (GET)
+#     - Protected user dashboard route
+#     - Requires authentication
+#     - Shows user's personal dashboard
+#     - Redirects to login if not authenticated
+#     - Displays user-specific information
+# /logout (GET)
+#     - User logout route
+#     - Clears user session
+#     - Redirects to home page
+#     - Shows logout confirmation message
+# Note: All form submissions should use POST method
+#       All page views should use GET method
+# For CyberCoder
