@@ -13,8 +13,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = Config.SQLALCHEMY_TRACK_MODIFICAT
 # Initialize database with app
 db.init_app(app)
 
-# Secret key for session management (required for flash messages)
-app.secret_key = 'your-secret-key-here'  # Change this to a secure key in production
+# Secret key for session management (required for flash messages), you can decide to remove them.
+app.secret_key = Config.SECRET_KEY  # Secret key from Config class loaded from .env
 
 # Route handler for the home page
 @app.route('/')
@@ -33,7 +33,7 @@ def home():
 def login():
     """
     Handle both GET and POST requests to /login.
-    GET: Display login form
+    GET: Display login form 
     POST: Process login form submission
     
     Returns:
@@ -41,14 +41,15 @@ def login():
         POST: redirect to dashboard on success or back to login on failure
     """
     if request.method == 'POST':
-        email = request.form.get('email')
-        password = request.form.get('password')
+        # Get form data from login.html form
+        email = request.form.get('login-email') # Changed to match login-email input ID
+        password = request.form.get('login-password') # Changed to match login-password input ID
         
         # Query database for user
         user = User.query.filter_by(email=email).first()
         
-        if user and user.password == password:  # In production, use proper password hashing
-            session['user_id'] = user.id  # Store user ID in session
+        if user and user.password == password:  # In production, use proper password hashing for security
+            session['user_id'] = user.id  # Store user ID in session just to keep track of logged-in user
             flash('Login successful!', 'success')
             return redirect(url_for('dashboard'))
         else:
@@ -71,16 +72,26 @@ def signup():
     if request.method == 'POST':
         # Get form data
         name = request.form.get('full-name')
-        email = request.form.get('email')
+        email = request.form.get('email') 
         password = request.form.get('password')
+        phone = request.form.get('phone')
+        occupation = request.form.get('occupation')
+        dob = request.form.get('dob')
         
-        # Check if user already exists
+        # Check if user already exists with email
         if User.query.filter_by(email=email).first():
             flash('Email already registered', 'error')
             return redirect(url_for('signup'))
             
-        # Create new user
-        new_user = User(name=name, email=email, password=password)  # Use password hashing in production
+        # Create new user with all fields
+        new_user = User(
+            name=name,
+            email=email,
+            password=password,  # Use password hashing later 
+            phone=phone,
+            occupation=occupation,
+            dob=dob
+        )
         db.session.add(new_user)
         db.session.commit()
         
