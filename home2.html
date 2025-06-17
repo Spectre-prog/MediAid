@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MediAid - Advanced Medical Solutions</title>
-    <!-- Google Fonts -->
+    <title>MediAid - Healthcare Insurance</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" href="./static/img/icon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Tailwind CSS -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         :root {
@@ -27,19 +28,27 @@
             background-color: var(--black);
             color: var(--white);
             overflow-x: hidden;
+            scroll-behavior: smooth;
         }
+        
         body::before {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -1;
-        background: linear-gradient(-45deg, #0a0a0a, #1d3557, #0a0a0a, #1d3557);
-        background-size: 400% 400%;
-        animation: gradientBG 15s ease infinite;
-        opacity: 0.8;
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(-45deg, #0a0a0a, #1d3557, #0a0a0a, #1d3557);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            opacity: 0.8;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
         
         h1, h2, h3, h4, h5, h6 {
@@ -52,19 +61,20 @@
         
         .glass-card {
             background: var(--glass);
+            -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
             border: 1px solid var(--glass-border);
             border-radius: 12px;
         }
         
         .video-background {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
-            z-index: -1;
+            z-index: -2;
             opacity: 0.3;
         }
         
@@ -128,47 +138,93 @@
             border-color: var(--primary);
             box-shadow: 0 0 10px rgba(0, 238, 255, 0.5);
         }
+        
+        .white-section {
+            background-color: var(--white);
+            color: var(--black);
+        }
+        
+        .white-section h2, 
+        .white-section h3, 
+        .white-section h4 {
+            color: var(--dark-blue);
+        }
+        
+        .white-section p {
+            color: rgba(0, 0, 0, 0.8);
+        }
+        
+        /* Section transitions */
+        section {
+            transition: all 0.8s ease;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        section.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Gradient fade between sections */
+        .gradient-fade {
+            position: relative;
+        }
+        
+        .gradient-fade::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(to bottom, transparent, var(--black));
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        .white-section.gradient-fade::after {
+            background: linear-gradient(to bottom, transparent, var(--white));
+        }
     </style>
 </head>
 <body class="min-h-screen">
-    
     <!-- Navigation -->
     <nav class="py-6 px-4 md:px-12 lg:px-24 flex justify-between items-center">
         <div class="flex items-center">
-            <span class="text-3xl font-bold text-white mr-2 glow-text">Medi<span class="text-[#0ef]">Aid</span></span>
-        </div>
-        
+    <span class="text-3xl font-bold text-white mr-2 glow-text">
+        Medi<span class="text-[#0ef]">Aid</span>
+    </span>
+    <i class="fa-solid fa-heart-pulse text-[#0ef] text-3xl ml-2"></i> 
+</div>
+
+        <!-- Ugo these are the navigation links for the routing and rendering -->
         <div class="hidden md:flex space-x-10">
             <a href="#home" class="nav-link text-white hover:text-[#0ef]">Home</a>
-            <a href="#services" class="nav-link text-white hover:text-[#0ef]">Services</a>
             <a href="#about" class="nav-link text-white hover:text-[#0ef]">About</a>
+            <a href="./login" class="nav-link text-white hover:text-[#0ef]">Login</a>
             <a href="#testimonials" class="nav-link text-white hover:text-[#0ef]">Testimonials</a>
             <a href="#contact" class="nav-link text-white hover:text-[#0ef]">Contact</a>
         </div>
-        
-        <button class="md:hidden text-white">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-        </button>
     </nav>
     
-    <!-- Hero Section -->
-    <section id="home" class="relative py-20 px-4 md:px-12 lg:px-24 flex flex-col md:flex-row items-center justify-between min-h-[80vh]">
+    <section id="home" class="relative py-20 px-4 md:px-12 lg:px-24 flex flex-col md:flex-row items-center justify-between min-h-[80vh] gradient-fade">
         <div class="md:w-1/2 mb-12 md:mb-0">
             <h1 class="text-4xl md:text-6xl font-bold mb-6 hero-text text-transparent bg-clip-text bg-gradient-to-r from-[#0ef] to-white">
-                Advanced Medical Care When You Need It Most
+                Advanced Insurance Services, right where you need it most...
             </h1>
             <p class="text-lg mb-8 text-[#ffffffcc] max-w-lg">
-                MediAid provides cutting-edge medical solutions with compassionate care. Our team of experts is dedicated to your health and well-being.
+                Navigating health insurance can be confusing, but it doesn’t have to be. With Medi Aid, you can upload your insurance document (PDF or image) and instantly get easy-to-understand explanations of your coverage. No more puzzling over complicated terms—we break everything down so you know what’s covered, what’s not, and what you’ll pay when visiting a hospital.
             </p>
             <div class="flex space-x-4">
-                <button class="btn-primary px-8 py-3 rounded-full font-semibold">
-                    Book Appointment
-                </button>
-                <button class="px-8 py-3 rounded-full font-semibold border border-[#0ef] text-[#0ef] hover:bg-[#0ef] hover:text-[#1d3557] transition-all duration-300">
-                    Learn More
-                </button>
+                <a href="/login.html" class="btn-primary px-8 py-3 rounded-full font-semibold">
+                Get assured!
+            </a>
+
+                <a href="/about.html" class="px-8 py-3 rounded-full font-semibold border border-[#0ef] text-[#0ef] hover:bg-[#0ef] hover:text-[#1d3557] transition-all duration-300">
+                    Learn more...
+                </a>
+                
             </div>
         </div>
         
@@ -185,84 +241,239 @@
         </div>
     </section>
     
-    <!-- Services Section -->
-    <section id="services" class="py-20 px-4 md:px-12 lg:px-24 bg-gradient-to-b from-[#0a0a0a] to-[#1d3557]">
-        <div class="text-center mb-16">
-            <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white">Our <span class="text-[#0ef]">Services</span></h2>
-            <p class="text-[#ffffffcc] max-w-2xl mx-auto">We offer a comprehensive range of medical services to meet all your healthcare needs.</p>
-        </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- Service Card 1 -->
-            <div class="feature-card glass-card p-6 rounded-xl transition-all duration-300">
-                <div class="w-14 h-14 bg-[#0ef] bg-opacity-20 rounded-lg flex items-center justify-center mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#0ef]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                    </svg>
-                </div>
-                <h3 class="text-xl font-bold mb-3 text-white">Emergency Care</h3>
-                <p class="text-[#ffffffcc]">24/7 emergency medical services with rapid response times and state-of-the-art facilities.</p>
+    <section id="features" class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-4xl font-bold text-gray-800 dark:text-white mb-4">
+                    Our <span class="text-[#0ef]">Features</span>
+                </h2>
+                <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                    Discover how MediAid makes healthcare accessible to everyone
+                </p>
             </div>
             
-            <!-- Service Card 2 -->
-            <div class="feature-card glass-card p-6 rounded-xl transition-all duration-300">
-                <div class="w-14 h-14 bg-[#0ef] bg-opacity-20 rounded-lg flex items-center justify-center mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#0ef]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                    </svg>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="glass-card p-8 rounded-2xl" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-16 h-16 bg-[#0ef] bg-opacity-20 rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-robot text-2xl text-[#0ef] animate-pulse"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">MedAI Chat</h3>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        Get instant medical advice from our AI-powered Insurance Agent anytime, anywhere.
+                    </p>
                 </div>
-                <h3 class="text-xl font-bold mb-3 text-white">Diagnostics</h3>
-                <p class="text-[#ffffffcc]">Advanced diagnostic imaging and laboratory services for accurate and timely results.</p>
-            </div>
-            
-            <!-- Service Card 3 -->
-            <div class="feature-card glass-card p-6 rounded-xl transition-all duration-300">
-                <div class="w-14 h-14 bg-[#0ef] bg-opacity-20 rounded-lg flex items-center justify-center mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#0ef]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
+                
+                <div class="glass-card p-8 rounded-2xl" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-16 h-16 bg-[#0ef] bg-opacity-20 rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-pills text-2xl text-[#0ef]"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">Medication Tracker</h3>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        Never miss a dose with our smart AI medication reminder system.
+                    </p>
                 </div>
-                <h3 class="text-xl font-bold mb-3 text-white">Specialist Consultations</h3>
-                <p class="text-[#ffffffcc]">Access to top specialists across various medical fields for comprehensive care.</p>
-            </div>
-            
-            <!-- Service Card 4 -->
-            <div class="feature-card glass-card p-6 rounded-xl transition-all duration-300">
-                <div class="w-14 h-14 bg-[#0ef] bg-opacity-20 rounded-lg flex items-center justify-center mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#0ef]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
+                
+                <div class="glass-card p-8 rounded-2xl" data-aos="fade-up" data-aos-delay="300">
+                    <div class="w-16 h-16 bg-[#0ef] bg-opacity-20 rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-stethoscope text-2xl text-[#0ef] animate-bounce"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">Symptom Checker</h3>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        Understand your symptoms and get recommendations for care.
+                    </p>
                 </div>
-                <h3 class="text-xl font-bold mb-3 text-white">Telemedicine</h3>
-                <p class="text-[#ffffffcc]">Virtual consultations with healthcare providers from the comfort of your home.</p>
-            </div>
-            
-            <!-- Service Card 5 -->
-            <div class="feature-card glass-card p-6 rounded-xl transition-all duration-300">
-                <div class="w-14 h-14 bg-[#0ef] bg-opacity-20 rounded-lg flex items-center justify-center mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#0ef]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-                    </svg>
+                
+                <div class="glass-card p-8 rounded-2xl" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-16 h-16 bg-[#0ef] bg-opacity-20 rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-hospital text-2xl text-[#0ef]"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">Hospital Finder</h3>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        Locate the nearest healthcare facilities with verified ratings using MedAI.
+                    </p>
                 </div>
-                <h3 class="text-xl font-bold mb-3 text-white">Rehabilitation</h3>
-                <p class="text-[#ffffffcc]">Comprehensive physical therapy and rehabilitation programs for recovery.</p>
-            </div>
-            
-            <!-- Service Card 6 -->
-            <div class="feature-card glass-card p-6 rounded-xl transition-all duration-300">
-                <div class="w-14 h-14 bg-[#0ef] bg-opacity-20 rounded-lg flex items-center justify-center mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-[#0ef]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                    </svg>
+                
+                <div class="glass-card p-8 rounded-2xl" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-16 h-16 bg-[#0ef] bg-opacity-20 rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-notes-medical text-2xl text-[#0ef] animate-pulse"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">Insurance Records</h3>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        Securely store and access your insurance history anytime.
+                    </p>
                 </div>
-                <h3 class="text-xl font-bold mb-3 text-white">Preventive Care</h3>
-                <p class="text-[#ffffffcc]">Health screenings and preventive services to maintain your well-being.</p>
+                
+                <div class="glass-card p-8 rounded-2xl" data-aos="fade-up" data-aos-delay="300">
+                    <div class="w-16 h-16 bg-[#0ef] bg-opacity-20 rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-mobile-alt text-2xl text-[#0ef]"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mb-3">USSD Access</h3>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        Full functionality even without internet via *347*7#
+                    </p>
+                </div>
             </div>
         </div>
     </section>
     
-    <!-- About Section -->
-    <section id="about" class="py-20 px-4 md:px-12 lg:px-24 bg-[#1d3557]">
+    <!-- Symptom Checker Preview -->
+    <section id="symptom" class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div data-aos="fade-right">
+                    <h2 class="text-4xl font-bold text-gray-800 dark:text-white mb-6">
+                        Try our<span class="text-[#0ef]"> AI Insurance Agent</span>
+                    </h2>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 mb-8">
+                        "Our AI-powered Insurance Agent helps you efficiently organize and understand your insurance information, providing detailed insights into how your money is utilized."
+                    </p>
+                    <a href="AI.html" class="bg-[#0ef] text-black px-8 py-3 rounded-full shadow-[0_0_20px_#0ef] hover:shadow-[0_0_30px_#0ef] font-bold text-lg">
+                        Say hi!
+                    </a>
+                </div>
+                
+                <div class="glass-card rounded-2xl overflow-hidden" data-aos="fade-left">
+                    <div class="bg-gray-100 dark:bg-gray-800 p-4 border-b border-gray-200 dark:border-gray-700">
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500 mr-2"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                            <div class="ml-4 text-sm font-medium text-gray-500 dark:text-gray-400">MedAI Chat</div>
+                        </div>
+                    </div>
+                    <div class="p-6 h-96 overflow-y-auto">
+                        <div class="flex mb-4">
+                            <div class="bg-[#0ef] bg-opacity-20 rounded-2xl p-4 max-w-xs">
+                                <p class="text-gray-800 dark:text-white">Hi Anna! I'm MedAI. How can I help you today?</p>
+                            </div>
+                        </div>
+                        <div class="flex mb-4 justify-end">
+                            <div class="bg-[#0ef] rounded-2xl p-4 max-w-xs">
+                                <p class="text-white">I uploaded my Insurance information about two weeks ago and i want to go for a checkup, could you help me get the nearest hospital in my area and lemme see my payment details</p>
+                            </div>
+                        </div>
+                        <div class="flex mb-4">
+                            <div class="bg-[#0ef] bg-opacity-20 rounded-2xl p-4 max-w-xs">
+                                <p class="text-gray-800 dark:text-white">
+                                    Okay Anna, 😊 Thanks for reaching out. I see that you uploaded your insurance information two weeks ago and are looking to schedule a checkup. I’d be happy to assist you!
+                                    - Nearest Hospital: I can help you find the best hospital in your area for your checkup. Could you please confirm your location or let me know your preferred area?
+                                    - Payment Details: I’ll check your uploaded insurance information and provide an overview of your coverage and payment details.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex mb-4 justify-end">
+                            <div class="bg-[#0ef] rounded-2xl p-4 max-w-xs">
+                                <p class="text-white"> 
+                                    Okay, remember to show me my payment details too please,  My location is 4 Kudirat Abiola Way, Oregun, Lagos.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex mb-4">
+                            <div class="bg-[#0ef] bg-opacity-20 rounded-2xl p-4 max-w-lg">
+                                <p class="text-gray-800 dark:text-white">
+                                    Alright! 😊 I’m happy to assist you with your checkup.<br>  
+
+                                    1. <strong>Nearest Hospital:</strong> Based on your location, here are some hospitals nearby:<br>
+
+                                        - <strong>Love World Medical Center – Located at 51/53, Kudirat Abiola Way, Oregun, Ikeja, Lagos. You can check their services:</strong>
+                                        <a href="https://loveworldmedicalcentre.com/contact" 
+                                        target="blank" 
+                                        class="text-blue-500 hover:text-blue-700 font-semibold underline">
+                                        Here
+                                        </a><br>
+
+                                        -<strong>The Eko Hospital – Located at 31 Mobolaji Bank Anthony Way, Opebi, Lagos. More details:</strong><a href="https://www.ekohospitals.com" class="text-blue-500 hover:text-blue-700 font-semibold underline target="blank">Here</a>.<br>
+
+                                        - <strong>St. Ives Specialist Hospital – Located at 12 Salvation Rd, Lagos. Learn more:</strong> <a href="https://stiveshealthcare.com" class="text-blue-500 hover:text-blue-700 font-semibold underline target="blank">Here</a>.<br>
+
+                                        - <strong>Payment Details: I’ll check your uploaded insurance information and provide an overview of your payment details.</strong>
+                                </p>
+                            </div>
+
+
+                        </div>
+                        <div class="flex">
+                            <div class="bg-gray-200 dark:bg-gray-700 rounded-2xl p-4 w-full">
+                                <p class="text-gray-500 dark:text-gray-300">Type your message...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="py-20 bg-gradient-to-r from-blue-900 to-cyan-900 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div data-aos="fade-right">
+                    <h2 class="text-4xl font-bold text-white mb-6">
+                        No Smartphone? <span class="text-[#0ef]">No Problem!</span>
+                    </h2>
+                    <p class="text-xl text-blue-100 mb-8">
+                        Access MediAid's core features through USSD on any mobile phone. Dial *347*7# to get started.
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <div class="bg-black bg-opacity-30 p-4 rounded-lg">
+                            <p class="text-blue-200 text-sm">MTN</p>
+                            <p class="text-white font-bold">*347*7#</p>
+                        </div>
+                        <div class="bg-black bg-opacity-30 p-4 rounded-lg">
+                            <p class="text-blue-200 text-sm">Airtel</p>
+                            <p class="text-white font-bold">*347*7#</p>
+                        </div>
+                        <div class="bg-black bg-opacity-30 p-4 rounded-lg">
+                            <p class="text-blue-200 text-sm">Glo</p>
+                            <p class="text-white font-bold">*347*7#</p>
+                        </div>
+                        <div class="bg-black bg-opacity-30 p-4 rounded-lg">
+                            <p class="text-blue-200 text-sm">9mobile</p>
+                            <p class="text-white font-bold">*347*7#</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="relative" data-aos="fade-left">
+                    <div class="glass-card p-6 rounded-3xl w-64 mx-auto">
+                        <div class="bg-gray-900 rounded-2xl p-4 h-96 relative overflow-hidden">
+                            <div class="text-center text-white mb-6">
+                                <h3 class="font-bold">MediAid USSD</h3>
+                                <p class="text-xs text-gray-400">*347*7#</p>
+                            </div>
+                            <div class="space-y-3">
+                                <div class="bg-blue-900 bg-opacity-50 rounded-lg p-2 text-white text-sm">
+                                    1. Insurance info
+                                </div>
+                                <div class="bg-blue-900 bg-opacity-50 rounded-lg p-2 text-white text-sm">
+                                    2. MedAI
+                                </div>
+                                <div class="bg-blue-900 bg-opacity-50 rounded-lg p-2 text-white text-sm">
+                                    3.Find hospitals
+                                </div>
+                                <div class="bg-blue-900 bg-opacity-50 rounded-lg p-2 text-white text-sm">
+                                    4. Emergency Contacts
+                                </div>
+                                <div class="bg-blue-900 bg-opacity-50 rounded-lg p-2 text-white text-sm">
+                                    5. Health Tips
+                                </div>
+                                <div class="bg-blue-900 bg-opacity-50 rounded-lg p-2 text-white text-sm">
+                                    6. Symptom Checker
+                                </div>
+                            </div>
+                            <div class="absolute bottom-4 left-0 right-0 px-4">
+                                <div class="bg-gray-800 rounded-full p-2 text-center text-white text-xs">
+                                    Reply with option number
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="about" class="py-20 px-4 md:px-12 lg:px-24 bg-[#1d3557] gradient-fade">
         <div class="flex flex-col md:flex-row items-center">
             <div class="md:w-1/2 mb-12 md:mb-0 md:pr-12">
                 <div class="relative">
@@ -276,7 +487,7 @@
             <div class="md:w-1/2">
                 <h2 class="text-3xl md:text-4xl font-bold mb-6 text-white">About <span class="text-[#0ef]">MediAid</span></h2>
                 <p class="text-[#ffffffcc] mb-6">
-                    Founded in 2010, MediAid has grown to become a leading provider of comprehensive healthcare services. Our mission is to deliver exceptional medical care with compassion and innovation.
+                    Founded in 2023,MediAid has grown into a leading provider of insurance-backed healthcare services, ensuring access to top specialists while keeping costs low. Our mission is to deliver exceptional coverage with security, innovation, and care—so you can focus on your health, worry-free.
                 </p>
                 <p class="text-[#ffffffcc] mb-8">
                     With a team of over 200 dedicated professionals and state-of-the-art facilities, we serve thousands of patients each year, providing personalized care tailored to individual needs.
@@ -285,31 +496,33 @@
                 <div class="grid grid-cols-2 gap-6 mb-8">
                     <div class="glass-card p-4 rounded-lg">
                         <h3 class="text-3xl font-bold text-[#0ef] mb-2">200+</h3>
-                        <p class="text-[#ffffffcc]">Medical Professionals</p>
+                        <p class="text-[#ffffffcc]">Insurance Agents, Auditors and Accountants</p>
                     </div>
                     <div class="glass-card p-4 rounded-lg">
                         <h3 class="text-3xl font-bold text-[#0ef] mb-2">24/7</h3>
-                        <p class="text-[#ffffffcc]">Emergency Services</p>
+                        <p class="text-[#ffffffcc]">Customer Services</p>
                     </div>
                     <div class="glass-card p-4 rounded-lg">
-                        <h3 class="text-3xl font-bold text-[#0ef] mb-2">50+</h3>
-                        <p class="text-[#ffffffcc]">Specialties Covered</p>
+                        <h3 class="text-3xl font-bold text-[#0ef] mb-2">6.9K+</h3>
+                        <p class="text-[#ffffffcc]">Customers Satisfaction and Testimonials Yearly</p>
                     </div>
                     <div class="glass-card p-4 rounded-lg">
-                        <h3 class="text-3xl font-bold text-[#0ef] mb-2">10K+</h3>
-                        <p class="text-[#ffffffcc]">Patients Yearly</p>
+                        <h3 class="text-3xl font-bold text-[#0ef] mb-2">7K+</h3>
+                        <p class="text-[#ffffffcc]">Customers Yearly</p>
                     </div>
                 </div>
                 
-                <button class="btn-primary px-8 py-3 rounded-full font-semibold">
-                    Learn More About Us
-                </button>
+                <a href="./about.html" class="btn-primary px-8 py-3 rounded-full font-semibold">
+                    Learn More About Us...
+                </a>
             </div>
         </div>
     </section>
     
+    
+    
     <!-- Testimonials Section -->
-    <section id="testimonials" class="py-20 px-4 md:px-12 lg:px-24 bg-gradient-to-b from-[#1d3557] to-[#0a0a0a]">
+    <section id="testimonials" class="py-20 px-4 md:px-12 lg:px-24 bg-gradient-to-b from-[#1d3557] to-[#0a0a0a] gradient-fade">
         <div class="text-center mb-16">
             <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white">Patient <span class="text-[#0ef]">Testimonials</span></h2>
             <p class="text-[#ffffffcc] max-w-2xl mx-auto">Hear what our patients have to say about their experiences with MediAid.</p>
@@ -324,11 +537,11 @@
                     </div>
                     <div>
                         <h4 class="font-bold text-white">Sarah Johnson</h4>
-                        <p class="text-sm text-[#0ef]">Cardiac Patient</p>
+                        <p class="text-sm text-[#0ef]">Accident victim</p>
                     </div>
                 </div>
                 <p class="text-[#ffffffcc] italic mb-4">
-                    "The care I received at MediAid was exceptional. The doctors took time to explain everything and made me feel comfortable throughout my treatment."
+                    "After i was rushed to a nearby hospital in a tragic car accident, i told MedAI about my situation and it used my insurance information to cover all my bills automatically without me having to pay a dime"
                 </p>
                 <div class="flex text-[#0ef]">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -361,7 +574,7 @@
                     </div>
                 </div>
                 <p class="text-[#ffffffcc] italic mb-4">
-                    "After my knee surgery, the rehabilitation team at MediAid helped me regain full mobility. Their personalized approach made all the difference."
+                    "After my knee surgery, the MediAI helped me regain full mobility by giving me tips, drugs and food to ear. This personalized approach made all the difference."
                 </p>
                 <div class="flex text-[#0ef]">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -390,11 +603,11 @@
                     </div>
                     <div>
                         <h4 class="font-bold text-white">Emily Rodriguez</h4>
-                        <p class="text-sm text-[#0ef]">Pediatric Care</p>
+                        <p class="text-sm text-[#0ef]">Insured user</p>
                     </div>
                 </div>
                 <p class="text-[#ffffffcc] italic mb-4">
-                    "As a mother, I'm so grateful for the pediatric team at MediAid. They're patient, kind, and truly care about my children's health and comfort."
+                    "As a mother, I'm so grateful for the insurance feature of MediAid, now my kids freely go for checkups and treatment when they are ill, with just a little or no cost"
                 </p>
                 <div class="flex text-[#0ef]">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -422,7 +635,7 @@
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-16">
                 <h2 class="text-3xl md:text-4xl font-bold mb-4 text-white">Contact <span class="text-[#0ef]">Us</span></h2>
-                <p class="text-[#ffffffcc] max-w-2xl mx-auto">Have questions or need to schedule an appointment? Reach out to our team.</p>
+                <p class="text-[#ffffffcc] max-w-2xl mx-auto">Have questions or need more information on how to manage your documents? Reach out to our team.</p>
             </div>
             
             <div class="flex flex-col lg:flex-row gap-12">
@@ -466,7 +679,7 @@
                                 </div>
                                 <div class="ml-4">
                                     <h4 class="text-lg font-semibold text-white">Address</h4>
-                                    <p class="text-[#ffffffcc]">123 Medical Drive, Healthville, HV 12345</p>
+                                    <p class="text-[#ffffffcc]">34, Kudirat Abiola Way, Oregun Ikeja Lagos.</p>
                                 </div>
                             </div>
                             
@@ -478,8 +691,8 @@
                                 </div>
                                 <div class="ml-4">
                                     <h4 class="text-lg font-semibold text-white">Phone</h4>
-                                    <p class="text-[#ffffffcc]">+1 (555) 123-4567 (Main)</p>
-                                    <p class="text-[#ffffffcc]">+1 (555) 987-6543 (Emergency)</p>
+                                    <p class="text-[#ffffffcc]">+234 912 602 2110 (Main)</p>
+                                    <p class="text-[#ffffffcc]">+234 807 395 5387 (Emergency)</p>
                                 </div>
                             </div>
                             
@@ -491,8 +704,8 @@
                                 </div>
                                 <div class="ml-4">
                                     <h4 class="text-lg font-semibold text-white">Email</h4>
-                                    <p class="text-[#ffffffcc]">info@medicaid.com</p>
-                                    <p class="text-[#ffffffcc]">support@medicaid.com</p>
+                                    <p class="text-[#ffffffcc]">mediaid@gmail.com</p>
+                                    <p class="text-[#ffffffcc]">support@mediaid.com</p>
                                 </div>
                             </div>
                             
@@ -506,7 +719,7 @@
                                     <h4 class="text-lg font-semibold text-white">Hours</h4>
                                     <p class="text-[#ffffffcc]">Monday - Friday: 8:00 AM - 8:00 PM</p>
                                     <p class="text-[#ffffffcc]">Saturday: 9:00 AM - 5:00 PM</p>
-                                    <p class="text-[#ffffffcc]">Sunday: Emergency only</p>
+                                    <p class="text-[#ffffffcc]">Sunday: 12:00 PM - 4:00 PM</p>
                                 </div>
                             </div>
                         </div>
@@ -522,28 +735,8 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
                 <div>
                     <h3 class="text-2xl font-bold mb-4 text-white">Medi<span class="text-[#0ef]">Aid</span></h3>
-                    <p class="text-[#ffffffcc] mb-6">Providing exceptional healthcare services with compassion and innovation.</p>
+                    <p class="text-[#ffffffcc] mb-6">Providing exceptional insurance-backed services with compassion and innovation.</p>
                     <div class="flex space-x-4">
-                        <a href="#" class="text-[#ffffffcc] hover:text-[#0ef] transition-colors duration-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z" />
-                            </svg>
-                        </a>
-                        <a href="#" class="text-[#ffffffcc] hover:text-[#0ef] transition-colors duration-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-                            </svg>
-                        </a>
-                        <a href="#" class="text-[#ffffffcc] hover:text-[#0ef] transition-colors duration-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z" />
-                            </svg>
-                        </a>
-                        <a href="#" class="text-[#ffffffcc] hover:text-[#0ef] transition-colors duration-300">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
-                            </svg>
-                        </a>
                     </div>
                 </div>
                 
@@ -551,27 +744,28 @@
                     <h4 class="text-lg font-semibold mb-4 text-white">Quick Links</h4>
                     <ul class="space-y-2">
                         <li><a href="#home" class="text-[#ffffffcc] hover:text-[#0ef] transition-colors duration-300">Home</a></li>
-                        <li><a href="#services" class="text-[#ffffffcc] hover:text-[#0ef] transition-colors duration-300">Services</a></li>
-                        <li><a href="#about" class="text-[#ffffffcc] hover:text-[#0ef] transition-colors duration-300">About Us</a></li>
-                        <li><a href="#testimonials" class="text-[#ffffffcc] hover:text-[#0ef] transition-colors duration-300">Testimonials</a></li>
+                        <li><a href="#services" class="text-[#ffffffcc] hover:text-[#0ef] transition-colors duration-300">About</a></li>
+                        <li><a href="./login.html" class="text-[#ffffffcc] hover:text-[#0ef] transition-colors duration-300">Login</a></li>
+                        <li><a href="./privacy.html" class="text-[#ffffffcc] hover:text-[#0ef] transition-colors duration-300">Privacy Policy</a></li>
                         <li><a href="#contact" class="text-[#ffffffcc] hover:text-[#0ef] transition-colors duration-300">Contact</a></li>
                     </ul>
                 </div>
                 
+                <!-- Ugo these are also nav links to other pages, so connect the backend to these too -->
                 <div>
                     <h4 class="text-lg font-semibold mb-4 text-white">Services</h4>
                     <ul class="space-y-2">
-                        <li><a href="#" class="text-[#ffffffcc] hover:text-[#0ef] transition-colors duration-300">Emergency Care</a></li>
-                        <li><a href="#" class="text-[#ffffffcc] hover:text-[#0ef] transition-colors duration-300">Diagnostics</a></li>
-                        <li><a href="#" class="text-[#ffffffcc] hover:text-[#0ef] transition-colors duration-300">Specialist Consultations</a></li>
-                        <li><a href="#" class="text-[#ffffffcc] hover:text-[#0ef] transition-colors duration-300">Telemedicine</a></li>
-                        <li><a href="#" class="text-[#ffffffcc] hover:text-[#0ef] transition-colors duration-300">Rehabilitation</a></li>
+                        <li><a href="./AI.html" class="text-[#ffffffcc] hover:text-[#0ef] transition-colors duration-300">MedAI chat</a></li>
+                        <li><a href="./AI.html" class="text-[#ffffffcc] hover:text-[#0ef] transition-colors duration-300">Medicaton Tracker</a></li>
+                        <li><a href="./AI.html" class="text-[#ffffffcc] hover:text-[#0ef] transition-colors duration-300">Symptom Checker</a></li>
+                        <li><a href="./AI.html" class="text-[#ffffffcc] hover:text-[#0ef] transition-colors duration-300">Hospital Finder</a></li>
+                        <li><a href="./docs.html" class="text-[#ffffffcc] hover:text-[#0ef] transition-colors duration-300">Insurance Records</a></li>
                     </ul>
                 </div>
                 
                 <div>
                     <h4 class="text-lg font-semibold mb-4 text-white">Newsletter</h4>
-                    <p class="text-[#ffffffcc] mb-4">Subscribe to our newsletter for health tips and updates.</p>
+                    <p class="text-[#ffffffcc] mb-4">Subscribe to our newsletter for insurance and health updates.</p>
                     <form class="flex">
                         <input type="email" placeholder="Your email" class="input-field px-4 py-2 rounded-l-lg focus:outline-none text-white w-full">
                         <button type="submit" class="bg-[#0ef] text-[#1d3557] px-4 py-2 rounded-r-lg font-semibold">
@@ -582,17 +776,22 @@
             </div>
             
             <div class="border-t border-[rgba(255,255,255,0.1)] mt-12 pt-8 text-center">
-                <p class="text-[#ffffffcc]">&copy; 2023 MediAid. All rights reserved.</p>
+                <p class="text-[#ffffffcc]">&copy; 2025 MediAid. All rights reserved.</p>
             </div>
         </div>
     </footer>
     
-    <!-- GSAP Animations -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
     <script>
         // Register ScrollTrigger plugin
         gsap.registerPlugin(ScrollTrigger);
+        
+        // Initialize all sections as inactive
+        const sections = document.querySelectorAll('section');
+        sections.forEach(section => {
+            section.classList.remove('active');
+        });
         
         // Hero section animation
         gsap.from(".hero-text", {
@@ -607,6 +806,16 @@
             y: -50,
             opacity: 0,
             ease: "power3.out"
+        });
+        
+        // Section fade-in animations
+        sections.forEach(section => {
+            ScrollTrigger.create({
+                trigger: section,
+                start: "top 80%",
+                onEnter: () => section.classList.add('active'),
+                onLeaveBack: () => section.classList.remove('active')
+            });
         });
         
         // Service cards animation
@@ -625,32 +834,6 @@
             });
         });
         
-        // About section animation
-        gsap.from("#about img", {
-            scrollTrigger: {
-                trigger: "#about",
-                start: "top 70%",
-                toggleActions: "play none none none"
-            },
-            x: -100,
-            opacity: 0,
-            duration: 1,
-            ease: "power3.out"
-        });
-        
-        gsap.from("#about h2, #about p, #about button", {
-            scrollTrigger: {
-                trigger: "#about",
-                start: "top 70%",
-                toggleActions: "play none none none"
-            },
-            x: 100,
-            opacity: 0,
-            duration: 1,
-            stagger: 0.2,
-            ease: "power3.out"
-        });
-        
         // Testimonial cards animation
         gsap.utils.toArray(".testimonial-card").forEach((card, i) => {
             gsap.from(card, {
@@ -667,33 +850,6 @@
             });
         });
         
-        // Contact form animation
-        gsap.from("form", {
-            scrollTrigger: {
-                trigger: "#contact",
-                start: "top 70%",
-                toggleActions: "play none none none"
-            },
-            y: 50,
-            opacity: 0,
-            duration: 1,
-            ease: "power3.out"
-        });
-        
-        gsap.from("#contact .glass-card", {
-            scrollTrigger: {
-                trigger: "#contact",
-                start: "top 70%",
-                toggleActions: "play none none none"
-            },
-            y: 50,
-            opacity: 0,
-            duration: 1,
-            delay: 0.3,
-            ease: "power3.out"
-        });
-        
-        // Continuous glow animation for primary color elements
         const glowElements = document.querySelectorAll('.btn-primary, .text-[#0ef], .nav-link');
         
         glowElements.forEach(el => {
@@ -705,6 +861,16 @@
                     repeat: 1
                 });
             }, 3000);
+        });
+        
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
         });
     </script>
 </body>

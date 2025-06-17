@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MediAid NG - Sign Up</title>
+  <!-- CyberCoder: I added the icon and removed the phone number and occupation bars in the sign-up -->
+  <link rel="icon" href="../static/img/icon.png">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <link rel="stylesheet" href="/static/css/styles.css">
   <style>
     .account-prompt {
@@ -33,9 +36,35 @@
       background-color: #0066cc;
       color: white;
     }
+
+    /* my css code for th balls animations, @ugo i added comments now ooo 😂, CyberCoder */
+    .neon-ball {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background-color: #0ef;
+    box-shadow: 0 0 15px #0ef, 0 0 30px #0ef;
+    border-radius: 0%;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: all 0.3s ease;
+    z-index: 1;
+  }
+
+  .left-ball {
+    left: 10px;
+  }
+
+  .right-ball {
+    right: 10px;
+  }
+
   </style>
 </head>
 <body>
+  <!-- I decided to add neon balls animation to make the page more immersive, CyberCoder -->
+  <div class="neon-ball left-ball"></div>
+<div class="neon-ball right-ball"></div>
   <div class="container">
     <h1 data-translate="app.title">MediAid NG</h1>
     <div class="auth-form">
@@ -52,27 +81,9 @@
           <input type="text" id="full-name" data-placeholder="signup.name.placeholder" placeholder="e.g., Adeola Musa" required>
         </div>
 
-        <!-- Contact (Phone OR Email) -->
-        <div class="form-group">
-          <label for="phone" data-translate="signup.phone">Phone Number</label>
-          <input type="tel" id="phone" data-placeholder="signup.phone.placeholder" placeholder="08012345678">
-        </div>
         <div class="form-group">
           <label for="email" data-translate="signup.email">Email</label>
           <input type="email" id="email" data-placeholder="signup.email.placeholder" placeholder="adeola@example.com">
-        </div>
-
-        <!-- Occupation -->
-        <div class="form-group">
-          <label for="occupation" data-translate="signup.occupation">Occupation</label>
-          <select id="occupation" required>
-            <option value="" disabled selected data-translate="signup.occupation.default">Select one</option>
-            <option value="farmer" data-translate="occupation.farmer">Farmer</option>
-            <option value="trader" data-translate="occupation.trader">Trader</option>
-            <option value="health-worker" data-translate="occupation.health-worker">Health Worker</option>
-            <option value="student" data-translate="occupation.student">Student</option>
-            <option value="other" data-translate="occupation.other">Other</option>
-          </select>
         </div>
 
         <div class="form-group">
@@ -298,6 +309,36 @@
       // Initialize with English
       setLanguage('english');
     });
+
+    // This is the JS code i used to animate the balls, Cybercoder
+  document.addEventListener('DOMContentLoaded', () => {
+    gsap.set(".neon-ball", {
+      borderRadius: "0%"
+    });
+
+    gsap.to(".neon-ball", {
+      borderRadius: "50%",
+      duration: 0.5,
+      delay: 1,
+      ease: "power2.out"
+    });
+
+    gsap.to(".neon-ball", {
+      y: () => window.innerHeight - 80,
+      duration: 2,
+      repeat: -1,
+      yoyo: true,
+      ease: "bounce.inOut",
+      delay: 1.5 // after morph
+    });
+
+    window.addEventListener('resize', () => {
+      gsap.to(".neon-ball", {
+        y: window.innerHeight - 80,
+        duration: 0.5
+      });
+    });
+  });
   </script>
 </body>
 </html>

@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MediAid NG - OTP Verification</title>
+  <link rel="icon" href="../static/img/icon.png">
   <link rel="stylesheet" href="/static/css/styles.css">
   <style>
     /* Additional styles for OTP page */
@@ -54,8 +55,9 @@
         <button onclick="resendOTP()" data-translate="otp.resend">Resend OTP</button>
       </div>
       
-      <button class="text-button" onclick="window.location.href='signup.html'" 
-              data-translate="otp.back">Back</button>
+      <!-- Ugo when you are working on the backend routing and rendering, this is the home page link -->
+      <a href="./home.html" class="text-button" onclick="window.location.href='signup.html'" 
+              data-translate="otp.back">Back</a>
     </div>
   </div>
   <script>
@@ -76,7 +78,7 @@
       pidgin: {
         'app.title': 'MediAid NG',
         'otp.title': 'Confirm OTP',
-        'otp.message': 'We don send OTP give',
+        'otp.message': 'We don send OTP give you, check am for your gmail',
         'otp.label': 'Put OTP',
         'otp.placeholder': '123456',
         'otp.submit': 'Check Am',

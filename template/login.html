@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MediAid NG - Login</title>
+  <link rel="icon" href="../static/img/icon.png">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <link rel="stylesheet" href="/static/css/styles.css">
   <style>
     /* Custom styles for the signup button */
@@ -50,9 +52,35 @@
     .forgot-password a:hover {
       text-decoration: underline;
     }
+
+    /* my css code for th balls animations, @ugo i added comments now ooo 😂, CyberCoder */
+    .neon-ball {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background-color: #0ef;
+    box-shadow: 0 0 15px #0ef, 0 0 30px #0ef;
+    border-radius: 0%;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: all 0.3s ease;
+    z-index: 1;
+  }
+
+  .left-ball {
+    left: 10px;
+  }
+
+  .right-ball {
+    right: 10px;
+  }
+
   </style>
 </head>
 <body>
+  <!-- I did the same for our login too, CyberCoder -->
+  <div class="neon-ball left-ball"></div>
+<div class="neon-ball right-ball"></div>
   <div class="container">
     <h1 data-translate="app.title">MediAid NG</h1>
     <div class="auth-form" id="login-form">
@@ -220,6 +248,37 @@
       const langParam = urlParams.get('lang');
       setLanguage(langParam || 'english');
     });
+
+    // The smae code used in the signup, CyberCoder
+  document.addEventListener('DOMContentLoaded', () => {
+    // Start from square shape
+    gsap.set(".neon-ball", {
+      borderRadius: "0%"
+    });
+
+    gsap.to(".neon-ball", {
+      borderRadius: "50%",
+      duration: 0.5,
+      delay: 1,
+      ease: "power2.out"
+    });
+
+    gsap.to(".neon-ball", {
+      y: () => window.innerHeight - 80, 
+      duration: 2,
+      repeat: -1,
+      yoyo: true,
+      ease: "bounce.inOut",
+      delay: 1.5 // after morph
+    });
+
+    window.addEventListener('resize', () => {
+      gsap.to(".neon-ball", {
+        y: window.innerHeight - 80,
+        duration: 0.5
+      });
+    });
+  });
   </script>
 </body>
 </html>
