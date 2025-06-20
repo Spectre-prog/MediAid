@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link rel="icon" href="../static/img/icon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --neon-blue: #0ef;
+            --deep-black: #0a0a0a;
+            --dark-blue: #1d3557;
+            --light-gray: #f9f9f9;
+            --semi-white: rgba(255, 255, 255, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--semi-white);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            background-color: #0a0a0a;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(-45deg, #0a0a0a, #1d3557, #0a0a0a, #1d3557);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            opacity: 0.8;
+        }
+
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+            transition: transform 0.5s ease;
+        }
+
+        /* Main Dashboard */
+        .dashboard {
+            flex: 1;
+            padding: 2rem;
+            padding-top: 6rem; /* Account for fixed header */
+            position: relative;
+            z-index: 1;
+            margin-top: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .app-header {
+            width: 100%;
+            padding: 1rem 2rem;
+            background: rgba(0, 0, 0, 0.5);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .app-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .app-logo i {
+            font-size: 2.5rem;
+            color: #0ef;
+            animation: pulse 2s infinite;
+        }
+
+        .app-logo h1 span.aid {
+            color: #0ef;
+        }
+
+        .app-logo h1 {
+            font-size: 2.8rem;
+            font-weight: bold;
+            margin: 0;
+            background: linear-gradient(to right, white 50%, white 50%);
+            color: white;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .user-info h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--semi-white);
+        }
+
+        .user-info p {
+            color: var(--semi-white);
+            opacity: 0.8;
+        }
+
+        .open-chat {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--neon-blue);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .open-chat:hover {
+            background: var(--neon-blue);
+            color: var(--deep-black);
+            transform: scale(1.1);
+            box-shadow: 0 0 8px var(--neon-blue);
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background: var(--dark-blue);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            min-height: 280px;
+        }
+
+        @media (min-width: 992px) {
+            .cards-container {
+                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+                gap: 2.5rem;
+            }
+            
+            .card {
+                padding: 2.5rem;
+                min-height: 320px;
+            }
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--neon-blue);
+        }
+
+        .card h3 {
+            color: var(--neon-blue);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .card p {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .card p strong {
+            font-weight: 600;
+        }
+
+        @media (min-width: 992px) {
+            .card h3 {
+                font-size: 1.8rem;
+                margin-bottom: 2rem;
+            }
+            
+            .card p {
+                font-size: 1.2rem;
+            }
+        }
+
+        .documents-section {
+            background: var(--dark-blue);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header h2 {
+            color: var(--neon-blue);
+            font-size: 1.5rem;
+        }
+
+        .upload-btn {
+            background: var(--neon-blue);
+            color: var(--deep-black);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .upload-btn:hover {
+            box-shadow: 0 0 15px var(--neon-blue);
+            transform: scale(1.05);
+        }
+
+        .documents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 992px) {
+            .documents-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 2rem;
+            }
+        }
+
+        .document-item {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .document-item:hover {
+            background: rgba(14, 239, 255, 0.1);
+            border-color: var(--neon-blue);
+        }
+
+        .document-icon {
+            margin-right: 0.8rem;
+            color: var(--neon-blue);
+            font-size: 1.2rem;
+        }
+
+        .document-info h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .document-info p {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        @media (min-width: 992px) {
+            .document-info h4 {
+                font-size: 1.3rem;
+            }
+            
+            .document-info p {
+                font-size: 1rem;
+            }
+        }
+
+        /* AI Chat Section */
+        .ai-chat {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: var(--dark-blue);
+            z-index: 1000;
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ai-chat.active {
+            transform: translateX(0);
+        }
+
+        .ai-chat {
+            width: 100%;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+        }
+
+        @media (min-width: 992px) {
+            .ai-chat {
+                width: 100%;
+            }
+        }
+
+        .ai-header {
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .ai-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(to bottom right, #0ef, #00a8ff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: var(--deep-black);
+            font-size: 1.2rem;
+        }
+
+        .ai-title {
+            flex: 1;
+        }
+
+        .ai-title h3 {
+            color: var(--neon-blue);
+            margin-bottom: 0.2rem;
+        }
+
+        .ai-title p {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .close-chat {
+            background: none;
+            border: none;
+            color: var(--semi-white);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-chat:hover {
+            color: var(--neon-blue);
+            transform: rotate(90deg);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            padding: 0.8rem 1rem;
+            border-radius: 10px;
+            max-width: 80%;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .ai-message {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            align-self: flex-start;
+            border-top-left-radius: 0;
+        }
+
+        .user-message {
+            background: rgba(14, 239, 255, 0.2);
+            border: 1px solid var(--neon-blue);
+            margin-left: auto;
+            border-top-right-radius: 0;
+        }
+
+        .chat-input {
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+        }
+
+        .chat-input input {
+            flex: 1;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 5px;
+            padding: 0.8rem 1rem;
+            color: var(--semi-white);
+            outline: none;
+        }
+
+        .chat-input input:focus {
+            border-color: var(--neon-blue);
+        }
+
+        .send-btn {
+            background: var(--neon-blue);
+            color: var(--deep-black);
+            border: none;
+            border-radius: 5px;
+            padding: 0 1.2rem;
+            margin-left: 0.5rem;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .send-btn:hover {
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        /* Animations */
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 5px var(--neon-blue);
+            }
+            to {
+                text-shadow: 0 0 15px var(--neon-blue), 0 0 20px var(--neon-blue);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard {
+                padding: 1rem;
+                margin-top: 10rem;
+            }
+
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+
+            .ai-chat {
+                width: 100%;
+                z-index: 1000;
+            }
+        }
+
+        /* File Upload Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--dark-blue);
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            border: 1px solid var(--glass-border);
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--semi-white);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .close-modal:hover {
+            color: var(--neon-blue);
+        }
+
+        .upload-area {
+            border: 2px dashed var(--glass-border);
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            margin: 1rem 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-area:hover {
+            border-color: var(--neon-blue);
+            background: rgba(14, 239, 255, 0.05);
+        }
+
+        .upload-area i {
+            font-size: 2rem;
+            color: var(--neon-blue);
+            margin-bottom: 1rem;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .submit-btn {
+            background: var(--neon-blue);
+            color: var(--deep-black);
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            box-shadow: 0 0 15px var(--neon-blue);
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <header class="app-header">
+            <div class="app-logo">
+                <i class="fas fa-heartbeat"></i>
+                <h1>Medi<span class="aid">Aid</span></h1>
+            </div>
+            <button class="open-chat" id="openChat">
+                <i class="fas fa-comment-medical"> AI</i>
+            </button>
+        </header>
+        <!-- Main Dashboard -->
+        <div class="dashboard">
+            <div class="header">
+                <div class="user-info">
+                    <h1>Welcome, John Doe</h1>
+                    <p>Last login: Today at 10:30 AM</p>
+                </div>
+            </div>
+
+            <div class="cards-container">
+                <div class="card">
+                    <h3>Health Summary</h3>
+                    <p><strong>Blood Type:</strong> O+</p>
+                    <p><strong>Allergies:</strong> Penicillin, Peanuts</p>
+                    <p><strong>Last Checkup:</strong> June 15, 2023</p>
+                </div>
+
+                <div class="card">
+                    <h3>Current Medications</h3>
+                    <p><strong>Lisinopril:</strong> 10mg daily</p>
+                    <p><strong>Atorvastatin:</strong> 20mg at night</p>
+                    <p><strong>Next Refill:</strong> August 5, 2023</p>
+                </div>
+
+                <div class="card">
+                    <h3>Upcoming Appointments</h3>
+                    <p><strong>Dr. Smith:</strong> July 20, 2023</p>
+                    <p><strong>Dental Cleaning:</strong> August 10, 2023</p>
+                    <p><strong>Eye Exam:</strong> September 5, 2023</p>
+                </div>
+            </div>
+
+            <div class="documents-section">
+                <div class="section-header">
+                    <h2>Medical Documents</h2>
+                    <button class="upload-btn" id="uploadBtn">Upload</button>
+                </div>
+                <div class="documents-grid">
+                    <div class="document-item">
+                        <div class="document-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <div class="document-info">
+                            <h4>Lab Results.pdf</h4>
+                            <p>June 10, 2023</p>
+                        </div>
+                    </div>
+                    <div class="document-item">
+                        <div class="document-icon">
+                            <i class="fas fa-file-image"></i>
+                        </div>
+                        <div class="document-info">
+                            <h4>X-Ray Scan.jpg</h4>
+                            <p>May 25, 2023</p>
+                        </div>
+                    </div>
+                    <div class="document-item">
+                        <div class="document-icon">
+                            <i class="fas fa-file-prescription"></i>
+                        </div>
+                        <div class="document-info">
+                            <h4>Prescription.pdf</h4>
+                            <p>May 15, 2023</p>
+                        </div>
+                    </div>
+                    <div class="document-item">
+                        <div class="document-icon">
+                            <i class="fas fa-file-contract"></i>
+                        </div>
+                        <div class="document-info">
+                            <h4>Insurance.pdf</h4>
+                            <p>January 1, 2023</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Chat Section -->
+        <div class="ai-chat" id="aiChat">
+            <div class="ai-header">
+                <div class="ai-icon">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <div class="ai-title">
+                    <h3>MediAid AI Assistant</h3>
+                    <p>Your personal health companion</p>
+                </div>
+                <c class="close-chat" id="closeChat">
+                    <i class="fas fa-times"></i>
+            </c>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="message ai-message">
+                    Hello! I'm MediAid AI. How can I assist you with your health today?
+                </div>
+            </div>
+            <div class="chat-input">
+                <input type="text" id="userMessage" placeholder="Type your message here...">
+                <button class="send-btn" id="sendMessage">
+                    <i class="fas fa-paper-plane"> Send</i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- File Upload Modal -->
+    <div class="modal" id="uploadModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeModal">&times;</button>
+            <h2>Upload Medical Document</h2>
+            <p>Upload your health insurance or medical records (PDF, JPG, PNG)</p>
+            
+            <label for="fileInput" class="upload-area" id="uploadArea">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Click to browse or drag and drop files here</p>
+                <p id="fileName">No file selected</p>
+            </label>
+            <input type="file" id="fileInput" class="file-input" accept=".pdf,.jpg,.jpeg,.png">
+            
+            <button class="submit-btn" id="submitUpload">Upload Document</button>
+        </div>
+    </div>
+
+    <script>
+
+        
+        // Chat functionality
+        const openChatBtn = document.getElementById('openChat');
+        const closeChatBtn = document.getElementById('closeChat');
+        const aiChat = document.getElementById('aiChat');
+        const chatMessages = document.getElementById('chatMessages');
+        const userMessageInput = document.getElementById('userMessage');
+        const sendMessageBtn = document.getElementById('sendMessage');
+
+        // Upload modal functionality
+        const uploadBtn = document.getElementById('uploadBtn');
+        const uploadModal = document.getElementById('uploadModal');
+        const closeModalBtn = document.getElementById('closeModal');
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const fileName = document.getElementById('fileName');
+        const submitUploadBtn = document.getElementById('submitUpload');
+
+        // Toggle chat
+        openChatBtn.addEventListener('click', () => {
+            aiChat.classList.toggle('active');
+            document.body.style.overflow = aiChat.classList.contains('active') ? 'hidden' : 'auto';
+        });
+
+        closeChatBtn.addEventListener('click', () => {
+            aiChat.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+
+        // Send message
+        function sendMessage() {
+            const message = userMessageInput.value.trim();
+            if (message) {
+                // Add user message
+                const userMessage = document.createElement('div');
+                userMessage.className = 'message user-message';
+                userMessage.textContent = message;
+                chatMessages.appendChild(userMessage);
+                
+                // Clear input
+                userMessageInput.value = '';
+                
+                // Scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // Simulate AI response after delay
+                setTimeout(() => {
+                    const aiResponse = document.createElement('div');
+                    aiResponse.className = 'message ai-message';
+                    
+                    // Simple responses based on keywords
+                    if (message.toLowerCase().includes('appointment')) {
+                        aiResponse.textContent = "I can help you schedule an appointment. Would you like me to check available slots with your doctor?";
+                    } else if (message.toLowerCase().includes('medication') || message.toLowerCase().includes('prescription')) {
+                        aiResponse.textContent = "Your current medications are Lisinopril 10mg daily and Atorvastatin 20mg at night. Your next refill is on August 5, 2023.";
+                    } else if (message.toLowerCase().includes('insurance')) {
+                        aiResponse.textContent = "Your insurance document is on file and expires December 31, 2023. Would you like me to help you with a renewal?";
+                    } else {
+                        aiResponse.textContent = "I've noted your question. For more detailed medical advice, I recommend consulting with your healthcare provider directly.";
+                    }
+                    
+                    chatMessages.appendChild(aiResponse);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 1000);
+            }
+        }
+
+        sendMessageBtn.addEventListener('click', sendMessage);
+        userMessageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Upload modal
+        uploadBtn.addEventListener('click', () => {
+            uploadModal.style.display = 'flex';
+        });
+
+        closeModalBtn.addEventListener('click', () => {
+            uploadModal.style.display = 'none';
+        });
+
+        // Handle file selection
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) {
+                fileName.textContent = fileInput.files[0].name;
+            } else {
+                fileName.textContent = 'No file selected';
+            }
+        });
+
+        // Drag and drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = 'var(--neon-blue)';
+            uploadArea.style.backgroundColor = 'rgba(14, 239, 255, 0.1)';
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.style.borderColor = 'var(--glass-border)';
+            uploadArea.style.backgroundColor = 'transparent';
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = 'var(--glass-border)';
+            uploadArea.style.backgroundColor = 'transparent';
+            
+            if (e.dataTransfer.files.length) {
+                fileInput.files = e.dataTransfer.files;
+                fileName.textContent = fileInput.files[0].name;
+            }
+        });
+
+        // Submit upload
+        submitUploadBtn.addEventListener('click', () => {
+            if (fileInput.files.length > 0) {
+                alert(`File "${fileInput.files[0].name}" uploaded successfully!`);
+                uploadModal.style.display = 'none';
+                
+                // Add to documents grid (simulated)
+                const documentsGrid = document.querySelector('.documents-grid');
+                const newDoc = document.createElement('div');
+                newDoc.className = 'document-item';
+                newDoc.innerHTML = `
+                    <div class="document-icon">
+                        <i class="fas fa-file-${fileInput.files[0].name.endsWith('.pdf') ? 'pdf' : 'image'}"></i>
+                    </div>
+                    <div class="document-info">
+                        <h4>${fileInput.files[0].name}</h4>
+                        <p>${new Date().toLocaleDateString()}</p>
+                    </div>
+                `;
+                documentsGrid.insertBefore(newDoc, documentsGrid.firstChild);
+                
+                // Reset
+                fileInput.value = '';
+                fileName.textContent = 'No file selected';
+            } else {
+                alert('Please select a file to upload');
+            }
+        });
+
+        // Click upload area to trigger file input
+        uploadArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === uploadModal) {
+                uploadModal.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
