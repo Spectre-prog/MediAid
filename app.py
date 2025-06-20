@@ -3,6 +3,8 @@ from cloudinary.uploader import upload
 from config import Config
 from models import db, User, InsuranceDocument
 import json
+from flask_mail import Mail, Message
+import random
 import os
 
 # Initialize Flask application
@@ -15,9 +17,20 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = Config.SQLALCHEMY_TRACK_MODIFICAT
 # Initialize database with app
 db.init_app(app)
 
+
 # Secret key for session management (required for flash messages), you can decide to remove them.
 app.secret_key = os.environ.get('SECRET_KEY')  # Secret key from .env file
 
+
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_USERNAME'] = 'projectfinodido@gmail.com'
+app.config['MAIL_PASSWORD'] = 'csqv yavo jcwj bghz'  # email password
+app.config['MAIL_DEFAULT_SENDER'] = 'projectfinodido@gmail.com'  # 
+ # app password
+mail = Mail(app)
 # Route handler for the home page
 @app.route('/')
 def home():
@@ -60,47 +73,106 @@ def login():
     return render_template('login.html')
 
 # Route handler for the signup page
+# ...existing code...
+
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    """
-    Handle user registration.
-    GET: Display signup form
-    POST: Process new user registration
-    
-    Returns:
-        GET: rendered signup.html template
-        POST: redirect to login page on success or back to signup on failure
-    """
-    if request.method == 'POST':
-        # Get form data
-        name = request.form.get('full-name')
-        email = request.form.get('email') 
-        password = request.form.get('password')
-        phone = request.form.get('phone')
-        occupation = request.form.get('occupation')
-        dob = request.form.get('dob')
-        
-        # Check if user already exists with email
-        if User.query.filter_by(email=email).first():
-            flash('Email already registered', 'error')
-            return redirect(url_for('signup'))
-            
-        # Create new user with all fields
+    if request.method == 'GET':
+        return render_template('signup.html')
+    else:
+        data = request.get_json()
+        if not data:
+            return jsonify({'error': 'No data provided!'}), 400
+
+        full_name = data.get('name')
+        phone = data.get('phone')
+        email = data.get('email')
+        dob = data.get('dob')
+        password = data.get('password')
+        language = data.get('language')
+
+        if not email:
+            return jsonify({'error': 'Email is required!'}), 400
+
+        otp = str(random.randint(100000, 999999))
+
+        session['pending_user'] = {
+            'full_name': full_name,
+            'phone': phone,
+            'email': email,
+            'dob': dob,
+            'password': password,
+            'language': language,
+            'otp': otp
+        }
+
+        try:
+            msg = Message('Your MediAid OTP', sender='your_email@gmail.com', recipients=[email])
+            msg.body = f"Your OTP is: {otp}"
+            mail.send(msg)
+        except Exception as e:
+            return jsonify({'error': f'Failed to send OTP: {str(e)}'}), 500
+
+        # Render the OTP page directly after sending OTP
+        return render_template('otp_verify.html', email=email)
+
+from flask import request, jsonify, render_template, session, redirect, url_for
+
+@app.route('/otp_verify', methods=['GET', 'POST'])
+def otp_verify():
+    if request.method == 'GET':
+        # Render the OTP input page
+        email = request.args.get('email')
+        lang = request.args.get('lang')
+        return render_template('otp_verify.html', email=email, lang=lang)
+
+    try:
+        # Support both JSON (AJAX) and form POST
+        if request.is_json:
+            data = request.get_json()
+        else:
+            data = request.form
+
+        input_otp = data.get('otp')
+        if not input_otp:
+            return jsonify({'error': 'OTP is required'}), 400
+
+        if 'pending_user' not in session:
+            return jsonify({'error': 'No OTP in session'}), 400
+
+        user_data = session['pending_user']
+
+        if input_otp != user_data['otp']:
+            return jsonify({'error': 'Incorrect OTP'}), 400
+
+        # Check if user already exists
+        if User.query.filter_by(email=user_data['email']).first():
+            return jsonify({'error': 'User already exists'}), 400
+
+        # Save to DB
         new_user = User(
-            name=name,
-            email=email,
-            password=password,  # Use password hashing later 
-            phone=phone,
-            occupation=occupation,
-            dob=dob
+            full_name=user_data.get('full_name'),
+            phone=user_data.get('phone'),
+            email=user_data.get('email'),
+            dob=user_data.get('dob'),
+            password=user_data.get('password'),  # Hash in production!
+            language=user_data.get('language')
         )
         db.session.add(new_user)
         db.session.commit()
-        
-        flash('Registration successful! Please login.', 'success')
-        return redirect(url_for('login'))
-        
-    return render_template('signup.html')
+
+        # Clear session
+        session.pop('pending_user')
+
+        # If form POST, redirect to login or dashboard
+        if not request.is_json:
+            return redirect(url_for('login'))
+
+        return jsonify({'message': 'User created successfully'}), 200
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': f'An error occurred: {str(e)}'}), 500
 
 # Route handler for the dashboard (protected route)
 @app.route('/dashboard')

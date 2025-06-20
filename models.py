@@ -3,11 +3,19 @@ from datetime import datetime #to be able to get the time a user uploads a parti
 
 db = SQLAlchemy() #initializing
 
-class User(db.Model): #creating a model named user in my postresql
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
+
+class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100)) #max 100 characters
-    email = db.Column(db.String(120), unique=True)
-    password = db.Column(db.String(20))
+    full_name = db.Column(db.String(100))
+    phone = db.Column(db.String(20))  # <-- Add this line
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    dob = db.Column(db.String(20))
+    password = db.Column(db.String(128))
+    language = db.Column(db.String(20)) #creating a model named user in my postresql
+
 
 
 class InsuranceDocument(db.Model):
