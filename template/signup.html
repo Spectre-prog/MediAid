@@ -112,7 +112,7 @@
       <!-- Already have an account? -->
       <div class="account-prompt">
         <span data-translate="login.prompt">Already have an account?</span>
-        <a href="login.html" class="login-button" data-translate="login.button">Login</a>
+        <a href="./login" class="login-button" data-translate="login.button">Login</a>
       </div>
       
       <!-- USSD Demo -->
@@ -235,26 +235,51 @@
     }
 
     // FORM VALIDATION
-    function validateSignupForm() {
-      const phone = document.getElementById('phone').value;
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
+      // ...existing code...
+function validateSignupForm() {
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
 
-      // At least phone OR email must be provided
-      if (!phone && !email) {
-        showError(translations[currentLanguage]['error.phone_email']);
-        return false;
-      }
+  // Email must be provided
+  if (!email) {
+    showError('Please provide your email!');
+    return false;
+  }
 
-      // Password length check
-      if (password.length < 6) {
-        showError(translations[currentLanguage]['error.password']);
-        return false;
-      }
+  // Password length check
+  if (password.length < 6) {
+    showError(translations[currentLanguage]['error.password']);
+    return false;
+  }
 
-      return true; // Validation passed
-    }
+  return true; // Validation passed
+}
 
+function handleSignup(event) {
+  event.preventDefault();
+
+  if (!validateSignupForm()) return;
+
+  // Gather form data
+  const userData = {
+    name: document.getElementById('full-name').value,
+    email: document.getElementById('email').value,
+    dob: document.getElementById('dob').value,
+    password: document.getElementById('password').value,
+    language: currentLanguage
+  };
+
+  console.log('Submitting:', userData); // For debugging
+
+  // Simulate API call (in real app, use fetch())
+  setTimeout(() => {
+    alert('Sign up successful!');
+    window.location.href = `./otp_verify?email=${encodeURIComponent(userData.email)}&lang=${currentLanguage}`;
+  }, 1000);
+  // ...inside handleSignup function...
+
+}
+// ...existing code...
     function showError(message) {
       // Create or reuse error display element
       let errorBox = document.getElementById('error-message');
@@ -269,35 +294,14 @@
     }
 
     //  FORM SUBMISSION 
-    function handleSignup(event) {
-      event.preventDefault();
-      
-      if (!validateSignupForm()) return;
 
-      // Gather form data
-      const userData = {
-        name: document.getElementById('full-name').value,
-        phone: document.getElementById('phone').value,
-        email: document.getElementById('email').value,
-        occupation: document.getElementById('occupation').value,
-        dob: document.getElementById('dob').value,
-        language: currentLanguage
-      };
-
-      console.log('Submitting:', userData); // For debugging
-      
-      // Simulate API call (in real app, use fetch())
-      setTimeout(() => {
-        simulateOTPSend(userData.phone);
-      }, 1000);
-    }
 
     function simulateOTPSend(phone) {
       console.log(`[MOCK] OTP sent to ${phone}`);
       alert(translations[currentLanguage]['ussd.demo']);
       
       // Redirect to OTP page with phone number
-      window.location.href = `otp-verify.html?phone=${encodeURIComponent(phone)}&lang=${currentLanguage}`;
+      window.location.href = `./otp_verify?phone=${encodeURIComponent(phone)}&lang=${currentLanguage}`;
     }
 
     //  USSD DEMO
@@ -348,6 +352,7 @@
       });
     });
   });
+  
   </script>
 </body>
 </html>
