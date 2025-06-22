@@ -66,7 +66,7 @@ def login():
         if user and user.password == password:  # In production, use proper password hashing for security
             session['user_id'] = user.id  # Store user ID in session just to keep track of logged-in user
             flash('Login successful!', 'success')
-            return redirect(url_for('user_dashboard.html'))
+            return redirect(url_for('user_dashboard'))
         else:
             flash('Invalid email or password', 'error')
     
@@ -102,7 +102,7 @@ def signup():
             
         # Create new user with all fields
         new_user = User(
-            full_name=user_data.get('full_name'),
+            full_name=User_data.get('full_name'),
             phone=user_data.get('phone'),
             email=user_data.get('email'),
             dob=user_data.get('dob'),
@@ -130,7 +130,7 @@ def dashboard():
     """
     if 'user_id' not in session:
         flash('Please login first', 'error')
-        return redirect(url_for('login.html'))
+        return redirect(url_for('login'))
         
     user = User.query.get(session['user_id'])
     return render_template('user_dashboard.html', user=user)
