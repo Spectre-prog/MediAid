@@ -1,6 +1,6 @@
 from flask import Flask, flash, session, render_template, redirect, url_for, request, jsonify
 from cloudinary.uploader import upload
-from config import Config
+import config
 from models import db, User, InsuranceDocument
 import json
 import os
@@ -9,8 +9,8 @@ import os
 app = Flask(__name__, template_folder='template', static_folder='static')
 
 # Configure database settings from Config class
-app.config['SQLALCHEMY_DATABASE_URI'] = Config.SQLALCHEMY_DATABASE_URI
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = Config.SQLALCHEMY_TRACK_MODIFICATIONS
+app.config['SQLALCHEMY_DATABASE_URI'] = config.SQLALCHEMY_DATABASE_URI
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = config.SQLALCHEMY_TRACK_MODIFICATIONS
 
 # Initialize database with app
 db.init_app(app)
@@ -53,7 +53,7 @@ def login():
         if user and user.password == password:  # In production, use proper password hashing for security
             session['user_id'] = user.id  # Store user ID in session just to keep track of logged-in user
             flash('Login successful!', 'success')
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('user_dashboard.html'))
         else:
             flash('Invalid email or password', 'error')
     
@@ -83,7 +83,7 @@ def signup():
         # Check if user already exists with email
         if User.query.filter_by(email=email).first():
             flash('Email already registered', 'error')
-            return redirect(url_for('signup'))
+            return redirect(url_for('signup.html'))
             
         # Create new user with all fields
         new_user = User(
@@ -98,7 +98,7 @@ def signup():
         db.session.commit()
         
         flash('Registration successful! Please login.', 'success')
-        return redirect(url_for('login'))
+        return redirect(url_for('login.html'))
         
     return render_template('signup.html')
 
@@ -115,10 +115,10 @@ def dashboard():
     """
     if 'user_id' not in session:
         flash('Please login first', 'error')
-        return redirect(url_for('login'))
+        return redirect(url_for('login.html'))
         
     user = User.query.get(session['user_id'])
-    return render_template('dashboard.html', user=user)
+    return render_template('user_dashboard.html', user=user)
 
 # Route for logging out
 @app.route('/logout')
