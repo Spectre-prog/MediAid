@@ -3,6 +3,8 @@ from cloudinary.uploader import upload
 import config
 from models import db, User, InsuranceDocument
 import json
+from flask_mail import Mail, Message
+import random
 import os
 
 # Initialize Flask application
@@ -15,9 +17,20 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = config.SQLALCHEMY_TRACK_MODIFICAT
 # Initialize database with app
 db.init_app(app)
 
+
 # Secret key for session management (required for flash messages), you can decide to remove them.
 app.secret_key = os.environ.get('SECRET_KEY')  # Secret key from .env file
 
+
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_USERNAME'] = 'projectfinodido@gmail.com'
+app.config['MAIL_PASSWORD'] = 'csqv yavo jcwj bghz'  # email password
+app.config['MAIL_DEFAULT_SENDER'] = 'projectfinodido@gmail.com'  # 
+ # app password
+mail = Mail(app)
 # Route handler for the home page
 @app.route('/')
 def home():
@@ -60,6 +73,8 @@ def login():
     return render_template('login.html')
 
 # Route handler for the signup page
+# ...existing code...
+
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     """
@@ -83,22 +98,22 @@ def signup():
         # Check if user already exists with email
         if User.query.filter_by(email=email).first():
             flash('Email already registered', 'error')
-            return redirect(url_for('signup.html'))
+            return redirect(url_for('signup'))
             
         # Create new user with all fields
         new_user = User(
-            name=name,
-            email=email,
-            password=password,  # Use password hashing later 
-            phone=phone,
-            occupation=occupation,
-            dob=dob
+            full_name=user_data.get('full_name'),
+            phone=user_data.get('phone'),
+            email=user_data.get('email'),
+            dob=user_data.get('dob'),
+            password=user_data.get('password'),  # Hash in production!
+            language=user_data.get('language')
         )
         db.session.add(new_user)
         db.session.commit()
         
         flash('Registration successful! Please login.', 'success')
-        return redirect(url_for('login.html'))
+        return redirect(url_for('login'))
         
     return render_template('signup.html')
 
