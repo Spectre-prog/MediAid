@@ -1,12 +1,10 @@
 from flask import Flask, flash, session, render_template, redirect, url_for, request, jsonify
 from cloudinary.uploader import upload
-from config import Config
-from models import db, User, InsuranceDocument
-import json
+from config import *
+from models import *
 from flask_mail import Mail, Message
 from flask_sqlalchemy import SQLAlchemy
-import random
-import os
+from flask_migrate import Migrate
 
 app = Flask(__name__, template_folder='template', static_folder='static')
 
@@ -15,6 +13,7 @@ app.config.from_object(Config) #to configure all the configurations in config.py
 #initializing the database
 db.init_app(app)
 mail = Mail(app)
+migrate = Migrate(app, db)
 
 
 
@@ -23,72 +22,66 @@ def home():
     return render_template('home.html')
 
 # Route handler for the login page
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        # Get form data from login.html form
-        email = request.form.get('login-email') 
-        password = request.form.get('login-password') 
-        
-        # Query database for user
-        user = User.query.filter_by(email=email).first()
-        
-        if user and user.password == password:  # In production, use proper password hashing for security
-            session['user_id'] = user.id  # Store user ID in session just to keep track of logged-in user
-            flash('Login successful!', 'success')
-            return redirect(url_for('user_dashboard'))
-        else:
-            flash('Invalid email or password', 'error')
-    
+@app.route('/login', methods=['GET'])#this is to get the login page
+def login_page():
     return render_template('login.html')
 
-# Route handler for the signup page
-# ...existing code...
+@app.route('/api/login', methods=['POST'])#this deals with sending to the js
+def api_login():
+    user_data = request.get_json()
+    email = user_data.get('email') #changed to email since we are working with js - Ugo 
+    password = user_data.get('password') 
+    
+    # Query database for user
+    user = User.query.filter_by(email=email).first()
+    
+    if user and user.check_password(password):  # In production, use proper password hashing for security
+        session['user_id'] = user.id  # Store user ID in session just to keep track of logged-in user
+        return jsonify({"success": True, "message": "Login successful"})
+    else:
+        return jsonify({"success": False, "message": "Invalid email or password"})
+    
 
-@app.route('/signup', methods=['GET', 'POST'])
-def signup():
-    if request.method == 'POST':
-        # Get form data
-        name = request.form.get('full-name')
-        email = request.form.get('email') 
-        password = request.form.get('password')
-        phone = request.form.get('phone')
-        occupation = request.form.get('occupation')
-        dob = request.form.get('dob')
-        
-        # Check if user already exists with email
-        if User.query.filter_by(email=email).first():
-            flash('Email already registered', 'error')
-            return redirect(url_for('signup'))
-            
-        # Create new user with all fields
-        new_user = User(
-            full_name=User_data.get('full_name'),
-            phone=user_data.get('phone'),
-            email=user_data.get('email'),
-            dob=user_data.get('dob'),
-            password=user_data.get('password'),  # Hash in production!
-            language=user_data.get('language')
-        )
-        db.session.add(new_user)
-        db.session.commit()
-        
-        flash('Registration successful! Please login.', 'success')
-        return redirect(url_for('login'))
-        
+@app.route('/signup', methods=['GET'])
+def signup_page():
     return render_template('signup.html')
 
-# Route handler for the dashboard (protected route)
-@app.route("/template/user_dashboard")
-def dashboard():
-    """
-    Protected route for authenticated users.
-    Requires user to be logged in.
+@app.route('/api/signup', methods=['POST'])
+def api_signup():
+    new_user_data = request.get_json()
+    name = new_user_data.get('name')
+    email = new_user_data.get('email') 
+    dob = new_user_data.get('dob')
+    phonenumber = new_user_data.get('phonenumber')
+    password = new_user_data.get('password')
     
-    Returns:
-        rendered dashboard template if authenticated
-        redirect to login if not authenticated
-    """
+    print("Received signup data:", new_user_data)
+    print("Email:", email)
+    print("Password:", password)
+    
+    if not email or len(password) < 6:
+        return jsonify({"success": False, "message": "Invalid input"})
+
+    # Check if user already exists with email
+    if User.query.filter_by(email=email).first():
+        return jsonify({"success": False, "message": "User already exists"})
+        
+    # Create new user with all fields
+    new_user = User(
+        name = name,
+        email = email,
+        dob = dob,
+        phonenumber = phonenumber,
+        password = password
+    )
+    db.session.add(new_user)
+    db.session.commit()
+    
+    return jsonify({"success": True, "message": "Registration successful, please login"})
+
+# Route handler for the dashboard (protected route)
+@app.route("/user_dashboard")
+def dashboard():
     if 'user_id' not in session:
         flash('Please login first', 'error')
         return redirect(url_for('login'))
