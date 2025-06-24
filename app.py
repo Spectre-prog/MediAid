@@ -79,7 +79,7 @@ def signup():
     return render_template('signup.html')
 
 # Route handler for the dashboard (protected route)
-@app.route('/dashboard')
+@app.route("/template/user_dashboard")
 def dashboard():
     """
     Protected route for authenticated users.
