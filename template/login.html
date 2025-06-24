@@ -207,8 +207,9 @@
     }
 
     // LOGIN FUNCTIONS
-    function handleLogin(event) {
+    async function handleLogin(event) {
       event.preventDefault();
+
       const email = document.getElementById('login-email').value;
       const password = document.getElementById('login-password').value;
 
@@ -218,12 +219,22 @@
         return;
       }
 
-      // Mock login - in real app, you would call your API here
-      console.log('Login attempt with:', { email });
-      alert(currentLanguage === 'english' 
-        ? 'Login successful!' 
-        : 'You don login well!');
-      window.location.href = './dashboard';
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        alert(currentLanguage === "english" ? "Login successful!" : "You don login well!");
+        window.location.href = "/user_dashboard";  // redirect after login
+      } else {
+        showError(data.message);  // show error from backend
+      }
     }
 
     function showError(message) {
