@@ -175,7 +175,7 @@ def otp_verify():
         return jsonify({'error': f'An error occurred: {str(e)}'}), 500
 
 # Route handler for the dashboard (protected route)
-@app.route('/dashboard')
+@app.route("/template/user_dashboard")
 def dashboard():
     """
     Protected route for authenticated users.
