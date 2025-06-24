@@ -1,64 +1,34 @@
 from flask import Flask, flash, session, render_template, redirect, url_for, request, jsonify
 from cloudinary.uploader import upload
-import config
+from config import Config
 from models import db, User, InsuranceDocument
 import json
 from flask_mail import Mail, Message
+from flask_sqlalchemy import SQLAlchemy
 import random
 import os
 
-# Initialize Flask application
 app = Flask(__name__, template_folder='template', static_folder='static')
 
-# Configure database settings from Config class
-app.config['SQLALCHEMY_DATABASE_URI'] = config.SQLALCHEMY_DATABASE_URI
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = config.SQLALCHEMY_TRACK_MODIFICATIONS
+app.config.from_object(Config) #to configure all the configurations in config.py
 
-# Initialize database with app
+#initializing the database
 db.init_app(app)
-
-
-# Secret key for session management (required for flash messages), you can decide to remove them.
-app.secret_key = os.environ.get('SECRET_KEY')  # Secret key from .env file
-
-
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 465
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_USERNAME'] = 'projectfinodido@gmail.com'
-app.config['MAIL_PASSWORD'] = 'csqv yavo jcwj bghz'  # email password
-app.config['MAIL_DEFAULT_SENDER'] = 'projectfinodido@gmail.com'  # 
- # app password
 mail = Mail(app)
-# Route handler for the home page
+
+
+
 @app.route('/')
 def home():
-    """
-    Handle requests to the root URL ('/').
-    Renders the home page template.
-    
-    Returns:
-        rendered template: home.html with any necessary context
-    """
     return render_template('home.html')
 
 # Route handler for the login page
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    """
-    Handle both GET and POST requests to /login.
-    GET: Display login form 
-    POST: Process login form submission
-    
-    Returns:
-        GET: rendered login.html template
-        POST: redirect to dashboard on success or back to login on failure
-    """
     if request.method == 'POST':
         # Get form data from login.html form
-        email = request.form.get('login-email') # Changed to match login-email input ID
-        password = request.form.get('login-password') # Changed to match login-password input ID
+        email = request.form.get('login-email') 
+        password = request.form.get('login-password') 
         
         # Query database for user
         user = User.query.filter_by(email=email).first()
@@ -77,15 +47,6 @@ def login():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    """
-    Handle user registration.
-    GET: Display signup form
-    POST: Process new user registration
-    
-    Returns:
-        GET: rendered signup.html template
-        POST: redirect to login page on success or back to signup on failure
-    """
     if request.method == 'POST':
         # Get form data
         name = request.form.get('full-name')
