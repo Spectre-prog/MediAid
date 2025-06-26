@@ -33,7 +33,7 @@
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
-            background-color: #0a0a0a;
+            background-color: #fff;
         }
 
         body::before {
@@ -596,21 +596,82 @@
         .submit-btn:hover {
             box-shadow: 0 0 15px var(--neon-blue);
         }
+
+        /* Shared icon style */
+.icon-btn {
+  background: var(--glass-bg, rgba(0, 0, 0, 0.3));
+  border: 1px solid var(--glass-border, #0ef);
+  color: var(--neon-blue, #0ef);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s ease;
+  cursor: pointer;
+}
+
+.icon-btn:hover {
+  background: var(--neon-blue, #0ef);
+  color: var(--deep-black, #000);
+  box-shadow: 0 0 12px var(--neon-blue, #0ef);
+  transform: scale(1.05);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.logout-btn {
+  display: flex;
+  text-decoration: none;
+}
+
+@media (min-width: 992px) {
+  .logout-btn i::after {
+    content: '';
+  }
+}
+
+@media (max-width: 991px) {
+  .logout-btn i::after {
+    margin-left: 6px;
+    text-decoration: none;
+  }
+
+  .logout-btn {
+    padding: 0.5rem 0.9rem;
+    width: auto;
+    border-radius: 10px;
+  }
+}
+
     </style>
 </head>
 <body>
     
     <div class="container">
         <header class="app-header">
-            <div class="app-logo">
-                <i class="fas fa-heartbeat"></i>
-                <h1>Medi<span class="aid">Aid</span></h1>
-            </div>
-            <button class="open-chat" id="openChat">
-                <i class="fas fa-comment-medical"> AI</i>
-            </button>
-        </header>
-        <!-- Main Dashboard -->
+  <div class="app-logo">
+    <i class="fas fa-heartbeat"></i>
+    <h1>Medi<span class="aid">Aid</span></h1>
+  </div>
+
+  <div class="header-actions">
+    <button class="icon-btn open-chat" id="openChat" aria-label="AI Chat">
+      <i class="fas fa-comment-medical"></i>
+    </button>
+
+    <a href="./signup.html" class="icon-btn logout-btn" aria-label="Logout">
+      <i class="fas fa-sign-out-alt"></i>
+    </a>
+  </div>
+</header>
+
         <div class="dashboard">
             <div class="header">
                 <div class="user-info">
