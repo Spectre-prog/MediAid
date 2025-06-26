@@ -92,15 +92,9 @@ def dashboard():
 # Route for logging out
 @app.route('/logout')
 def logout():
-    """
-    Handle user logout by clearing session.
-    
-    Returns:
-        redirect to home page
-    """
     session.clear()
     flash('You have been logged out', 'info')
-    return redirect(url_for('home'))
+    return redirect(url_for('home'))# the logout now reroutes to the landing page
 
 # route for AI testing interface
 @app.route('/ai-test', methods=['GET', 'POST'])
@@ -126,53 +120,8 @@ def ai_test():
                 
     return render_template('ai_test.html')
 
-# Run the application
 if __name__ == '__main__':
     with app.app_context():
-        # Create database tables
-        db.create_all()
-    # Start development server    
+        db.create_all()  
     app.run(debug=True)
 
-
-# Frontend Route Guide:
-# -------------------
-# / (GET)
-#     - Home page route
-#     - Displays the main landing page
-#     - Public access
-# /login (GET, POST)
-#     - User authentication route
-#     - GET: Shows login form
-#     - POST: Processes login credentials
-#     - Accepts: email, password
-#     - Redirects to dashboard on success
-#     - Shows error message on failure
-# /signup (GET, POST)
-#     - New user registration route
-#     - GET: Shows registration form
-#     - POST: Processes new user registration
-#     - Accepts: full-name, email, password
-#     - Redirects to login page on success
-#     - Shows error if email already exists
-# /dashboard (GET)
-#     - Protected user dashboard route
-#     - Requires authentication
-#     - Shows user's personal dashboard
-#     - Redirects to login if not authenticated
-#     - Displays user-specific information
-# /logout (GET)
-#     - User logout route
-#     - Clears user session
-#     - Redirects to home page
-#     - Shows logout confirmation message
-# /ai-test (GET, POST)
-#     - AI testing interface route
-#     - GET: Displays AI testing form
-#     - POST: Processes uploaded document and analyzes it using AI
-#     - Accepts: document file
-#     - Redirects back to form on error
-#     - Displays analysis result on success
-# Note: All form submissions should use POST method
-#       All page views should use GET method
-# For CyberCoder
