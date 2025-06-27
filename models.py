@@ -24,7 +24,7 @@ class User(db.Model): #creating a model named user in my postresql to store user
     def check_password(self, password):
         return check_password_hash(self.hashed_password, password)
 
-class InsuranceDocument(db.Model): #creating a model to store the details of insurance docs the user uploads
+class UserDocument(db.Model): #creating a model to store the details of insurance docs the user uploads
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     filename = db.Column(db.String(200))

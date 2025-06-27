@@ -3,6 +3,7 @@ import psycopg2
 import cloudinary
 import cloudinary.uploader
 from dotenv import load_dotenv
+import google.generativeai as genai
 
 load_dotenv()
 
@@ -19,8 +20,12 @@ class Config:
     MAIL_PASSWORD = os.getenv('MAIL_PASSWORD')
     MAIL_DEFAULT_SENDER = os.getenv('MAIL_DEFAULT_SENDER')
 
-# cloudinary.config(
-#     cloud_name = os.getenv('CLOUDINARY_CLOUD_NAME'),
-#     api_key = os.getenv('CLOUDINARY_API_KEY'),
-#     api_secret = os.getenv('CLOUDINARY_API_SECRET_KEY')
-# ) #nb: i made this because normal sql database like postgresql cannot store very large files so this is the real storage for the files why the sql is acting like a notebook
+cloudinary.config(
+    cloud_name = os.getenv('CLOUDINARY_CLOUD_NAME'),
+    api_key = os.getenv('CLOUDINARY_API_KEY'),
+    api_secret = os.getenv('CLOUDINARY_API_SECRET_KEY')
+) #nb: i made this because normal sql database like postgresql cannot store very large files so this is the real storage for the files why the sql is acting like a notebook
+
+genai.configure(
+    api_key = os.getenv('GEMINI_API_KEY')
+)
