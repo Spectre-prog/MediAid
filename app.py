@@ -155,16 +155,16 @@ def my_docs():
 
 def extract_text_from_pdf(fle_bytes):
     
-
-@app.route('/analyze/<int:doc_id')
-def doc_analysis(doc_id):
-    if 'user_id' not in session:
-        return jsonify({'success': False, 'message': 'Please login'})
     
-    user_id=session['user_id']
-    doc = UserDocument.query.filterby(id=doc_id, user_id=user_id)
-    if not doc:
-        return jsonify({'message': 'Document not found'}),404
+    @app.route('/analyze/<int:doc_id')
+    def doc_analysis(doc_id):
+        if 'user_id' not in session:
+            return jsonify({'success': False, 'message': 'Please login'})
+        
+        user_id=session['user_id']
+        doc = UserDocument.query.filterby(id=doc_id, user_id=user_id)
+        if not doc:
+            return jsonify({'message': 'Document not found'}),404
     
 
         
