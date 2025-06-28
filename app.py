@@ -153,7 +153,7 @@ def my_docs():
     return jsonify({'documents': doc_urls})
 
 
-def extract_text_from_pdf(fle_bytes):
+# def extract_text_from_pdf(fle_bytes):
     
     
     @app.route('/analyze/<int:doc_id')
