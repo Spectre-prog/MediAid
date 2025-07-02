@@ -3,21 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Health Dashboard</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <link rel="icon" href="../static/img/icon.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>MediAid - Personal Health Dashboard</title>
     <style>
+        /* Root variables from prompt */
         :root {
-            --neon-blue: #0ef;
-            --deep-black: #0a0a0a;
-            --dark-blue: #1d3557;
-            --light-gray: #f9f9f9;
-            --semi-white: rgba(255, 255, 255, 0.8);
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.2);
+            --color-1: #0ef;
+            --color-2: #08c;
+            --color-3: #0f172a;
+            --color-4: #020617;
+            --color-5: #f8fafc;
+            --color-6: rgba(255, 255, 255, 0.05);
+            --color-7: rgba(255, 255, 255, 0.1);
+            --color-8: rgba(0, 238, 255, 0.3);
+            --color-9: rgba(0, 238, 255, 0.6);
+            --color-10: rgba(0, 0, 0, 0.2);
+            --color-11: rgba(2, 6, 23, 0.9);
+            --color-12: rgba(0, 0, 0, 0.3);
+            --color-13: #fff;
+            --color-14: rgba(0, 0, 0, 0.4);
+            --color-15: rgba(0, 238, 255, 0.15);
+            --color-16: rgba(0,0,0,0.3);
+            --color-17: rgba(0, 238, 255, 0.1);
+            --color-18: rgba(0, 238, 255, 0.2);
+            --color-19: rgba(0, 0, 0, 0.7);
+            --color-20: rgba(0, 238, 255, 0.03);
+            --color-21: #ff00aa;
+            --color-22: rgba(0, 238, 255, 0.05);
+            --color-23: rgba(255, 255, 255, 0.2);
+
+            --primary: var(--color-1);
+            --primary-dark: var(--color-2);
+            --dark: var(--color-3);
+            --darker: var(--color-4);
+            --light: var(--color-5);
+            --glass: var(--color-6);
+            --glass-border: var(--color-7);
         }
 
+        /* Base reset */
         * {
             margin: 0;
             padding: 0;
@@ -25,31 +48,17 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
+        /* Body styling with animated gradient background */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            color: var(--semi-white);
             min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-            background-color: white;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: linear-gradient(-45deg, #0a0a0a, #1d3557, #0a0a0a, #1d3557);
+            background: linear-gradient(-45deg, var(--darker), var(--dark), var(--primary-dark), var(--darker));
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
-            opacity: 0.8;
+            color: var(--light);
+            overflow-x: hidden;
         }
 
+        /* Background animation */
         @keyframes gradientBG {
             0% {
                 background-position: 0% 50%;
@@ -62,894 +71,1096 @@
             }
         }
 
+        /* Floating bubbles animation */
+        .bubbles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        .bubble {
+            position: absolute;
+            bottom: -100px;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0.2;
+            animation: rise 10s infinite ease-in;
+        }
+
+        .bubble:nth-child(1) {
+            width: 40px;
+            height: 40px;
+            left: 10%;
+            animation-duration: 8s;
+        }
+
+        .bubble:nth-child(2) {
+            width: 20px;
+            height: 20px;
+            left: 20%;
+            animation-duration: 5s;
+            animation-delay: 1s;
+        }
+
+        .bubble:nth-child(3) {
+            width: 50px;
+            height: 50px;
+            left: 35%;
+            animation-duration: 7s;
+            animation-delay: 2s;
+        }
+
+        .bubble:nth-child(4) {
+            width: 80px;
+            height: 80px;
+            left: 50%;
+            animation-duration: 11s;
+            animation-delay: 0s;
+        }
+
+        .bubble:nth-child(5) {
+            width: 35px;
+            height: 35px;
+            left: 55%;
+            animation-duration: 6s;
+            animation-delay: 1s;
+        }
+
+        .bubble:nth-child(6) {
+            width: 45px;
+            height: 45px;
+            left: 65%;
+            animation-duration: 8s;
+            animation-delay: 3s;
+        }
+
+        .bubble:nth-child(7) {
+            width: 25px;
+            height: 25px;
+            left: 75%;
+            animation-duration: 7s;
+            animation-delay: 2s;
+        }
+
+        .bubble:nth-child(8) {
+            width: 80px;
+            height: 80px;
+            left: 80%;
+            animation-duration: 6s;
+            animation-delay: 1s;
+        }
+
+        @keyframes rise {
+            0% {
+                bottom: -100px;
+                transform: translateX(0);
+            }
+            50% {
+                transform: translateX(100px);
+            }
+            100% {
+                bottom: 1080px;
+                transform: translateX(-200px);
+            }
+        }
+
+        /* Glass morphism effect */
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 10px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 8px 32px 0 var(--color-14);
+        }
+
+        /* Main container */
         .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
             position: relative;
-            z-index: 1;
         }
 
-        .container {
-            display: flex;
-            min-height: 100vh;
-            transition: transform 0.5s ease;
-        }
-
-        /* Main Dashboard */
-        .dashboard {
-            flex: 1;
-            padding: 2rem;
-            padding-top: 6rem; /* Account for fixed header */
-            position: relative;
-            z-index: 1;
-            margin-top: 20px;
-        }
-
-        .header {
+        /* Navigation styling */
+        nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 2rem;
+            padding: 20px 0;
+            margin-bottom: 30px;
         }
 
-        .app-header {
-            width: 100%;
-            padding: 1rem 2rem;
-            background: rgba(0, 0, 0, 0.5);
-            -webkit-backdrop-filter: blur(10px);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--glass-border);
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo span {
+            color: var(--light);
+            font-weight: 700;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 30px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--darker);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px var(--color-8);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--light);
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn-outline:hover {
+            background: var(--glass);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px var(--color-14);
+        }
+
+        /* Welcome overlay styling */
+        .welcome-overlay {
             position: fixed;
             top: 0;
             left: 0;
-            z-index: 100;
+            width: 100%;
+            height: 100%;
+            background: var(--color-11);
+            -webkit-backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px);
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .app-logo {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .app-logo i {
-            font-size: 2.5rem;
-            color: #0ef;
-            animation: pulse 2s infinite;
-        }
-
-        .app-logo h1 span.aid {
-            color: #0ef;
-        }
-
-        .app-logo h1 {
-            font-size: 2.8rem;
-            font-weight: bold;
-            margin: 0;
-            background: linear-gradient(to right, white 50%, white 50%);
-            color: white;
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        .user-info h1 {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-            color: var(--semi-white);
-        }
-
-        .user-info p {
-            color: var(--semi-white);
-            opacity: 0.8;
-        }
-
-        .open-chat {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            color: var(--neon-blue);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
+            align-items: center;
+            z-index: 100;
+            transition: all 0.5s ease;
+            padding: 20px;
+        }
+
+        .welcome-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .welcome-content {
+            background: var(--glass);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            text-align: center;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 15px 50px var(--color-14);
+        }
+
+        .welcome-content h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .welcome-content p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .welcome-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        /* Upload modal styling */
+        .upload-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--glass);
+            padding: 40px;
+            border-radius: 20px;
+            z-index: 101;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 15px 50px var(--color-14);
+            text-align: center;
+            display: none;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .upload-modal.active {
+            display: block;
+        }
+
+        .upload-modal h2 {
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .upload-modal p {
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--glass-border);
+            border-radius: 10px;
+            padding: 40px 20px;
+            margin-bottom: 30px;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 1.2rem;
         }
 
-        .open-chat:hover {
-            background: var(--neon-blue);
-            color: var(--deep-black);
-            transform: scale(1.1);
-            box-shadow: 0 0 8px var(--neon-blue);
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: var(--color-20);
         }
 
-        .cards-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
+        .upload-area i {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: block;
         }
 
-        .card {
-            background: var(--dark-blue);
-            border-radius: 15px;
-            padding: 2rem;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            min-height: 280px;
-        }
-
-        @media (min-width: 992px) {
-            .cards-container {
-                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-                gap: 2.5rem;
-            }
-            
-            .card {
-                padding: 2.5rem;
-                min-height: 320px;
-            }
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-        }
-
-        .card::before {
-            content: '';
+        /* Close button for modal */
+        .close-modal {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: var(--neon-blue);
-        }
-
-        .card h3 {
-            color: var(--neon-blue);
-            margin-bottom: 1.5rem;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: var(--light);
             font-size: 1.5rem;
-            font-weight: 600;
+            cursor: pointer;
         }
 
-        .card p {
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
-            font-weight: 500;
+        /* Dashboard main content layout */
+        .dashboard {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
         }
 
-        .card p strong {
-            font-weight: 600;
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
         }
 
-        @media (min-width: 992px) {
-            .card h3 {
-                font-size: 1.8rem;
-                margin-bottom: 2rem;
-            }
-            
-            .card p {
-                font-size: 1.2rem;
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
             }
         }
 
-        .documents-section {
-            background: var(--dark-blue);
-            border-radius: 10px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
+        .dashboard-section {
+            background: var(--glass);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid var(--glass-border);
         }
 
         .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--glass-border);
         }
 
         .section-header h2 {
-            color: var(--neon-blue);
             font-size: 1.5rem;
+            color: var(--primary);
         }
 
-        .upload-btn {
-            background: var(--neon-blue);
-            color: var(--deep-black);
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-
-        .upload-btn:hover {
-            box-shadow: 0 0 15px var(--neon-blue);
-            transform: scale(1.05);
-        }
-
-        .documents-grid {
+        /* Health status cards */
+        .health-cards {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
         }
 
-        @media (min-width: 992px) {
-            .documents-grid {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-                gap: 2rem;
-            }
-        }
-
-        .document-item {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 8px;
-            padding: 1rem;
-            display: flex;
-            align-items: center;
+        .health-card {
+            padding: 15px;
+            border-radius: 10px;
+            background: var(--color-22);
             transition: all 0.3s ease;
             cursor: pointer;
         }
 
-        .document-item:hover {
-            background: rgba(14, 239, 255, 0.1);
-            border-color: var(--neon-blue);
+        .health-card:hover {
+            background: var(--color-15);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px var(--color-14);
         }
 
-        .document-icon {
-            margin-right: 0.8rem;
-            color: var(--neon-blue);
+        .health-card i {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+
+        .health-card h3 {
             font-size: 1.2rem;
+            margin-bottom: 5px;
         }
 
-        .document-info h4 {
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-        }
-
-        .document-info p {
+        .health-card p {
             font-size: 0.9rem;
             opacity: 0.8;
         }
 
-        @media (min-width: 992px) {
-            .document-info h4 {
-                font-size: 1.3rem;
-            }
-            
-            .document-info p {
-                font-size: 1rem;
-            }
+        /* Documents section */
+        .documents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
         }
 
-        /* AI Chat Section */
-        .ai-chat {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
-            background: var(--dark-blue);
-            z-index: 1000;
-            transform: translateX(-100%);
-            transition: transform 0.5s ease;
+        .document-card {
+            aspect-ratio: 1;
+            border-radius: 10px;
+            background: var(--color-22);
             display: flex;
             flex-direction: column;
-        }
-
-        .ai-chat.active {
-            transform: translateX(0);
-        }
-
-        .ai-chat {
-            width: 100%;
-            box-shadow: 0 0 30px rgba(0,0,0,0.5);
-        }
-
-        @media (min-width: 992px) {
-            .ai-chat {
-                width: 100%;
-            }
-        }
-
-        .ai-header {
-            padding: 1.5rem;
-            background: rgba(0, 0, 0, 0.2);
-            display: flex;
-            align-items: center;
-            border-bottom: 1px solid var(--glass-border);
-        }
-
-        .ai-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(to bottom right, #0ef, #00a8ff);
-            border-radius: 50%;
-            display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 1rem;
-            color: var(--deep-black);
-            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
-        .ai-title {
-            flex: 1;
+        .document-card:hover {
+            background: var(--color-15);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px var(--color-14);
         }
 
-        .ai-title h3 {
-            color: var(--neon-blue);
-            margin-bottom: 0.2rem;
+        .document-card i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 10px;
         }
 
-        .ai-title p {
+        .document-card .document-name {
             font-size: 0.8rem;
-            opacity: 0.8;
+            text-align: center;
+            padding: 0 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
         }
 
-        .close-chat {
-            background: none;
-            border: none;
-            color: var(--semi-white);
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .close-chat:hover {
-            color: var(--neon-blue);
-            transform: rotate(90deg);
-        }
-
-        .chat-messages {
-            flex: 1;
-            padding: 1.5rem;
-            overflow-y: auto;
-        }
-
-        .message {
-            margin-bottom: 1rem;
-            padding: 0.8rem 1rem;
-            border-radius: 10px;
-            max-width: 80%;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .ai-message {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            align-self: flex-start;
-            border-top-left-radius: 0;
-        }
-
-        .user-message {
-            background: rgba(14, 239, 255, 0.2);
-            border: 1px solid var(--neon-blue);
-            margin-left: auto;
-            border-top-right-radius: 0;
-        }
-
-        .chat-input {
-            padding: 1rem;
-            background: rgba(0, 0, 0, 0.2);
-            border-top: 1px solid var(--glass-border);
-            display: flex;
-        }
-
-        .chat-input input {
-            flex: 1;
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 5px;
-            padding: 0.8rem 1rem;
-            color: var(--semi-white);
-            outline: none;
-        }
-
-        .chat-input input:focus {
-            border-color: var(--neon-blue);
-        }
-
-        .send-btn {
-            background: var(--neon-blue);
-            color: var(--deep-black);
-            border: none;
-            border-radius: 5px;
-            padding: 0 1.2rem;
-            margin-left: 0.5rem;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
-        }
-
-        .send-btn:hover {
-            box-shadow: 0 0 10px var(--neon-blue);
-        }
-
-        /* Animations */
-        @keyframes glow {
-            from {
-                text-shadow: 0 0 5px var(--neon-blue);
-            }
-            to {
-                text-shadow: 0 0 15px var(--neon-blue), 0 0 20px var(--neon-blue);
-            }
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .dashboard {
-                padding: 1rem;
-                margin-top: 10rem;
-            }
-
-            .cards-container {
-                grid-template-columns: 1fr;
-            }
-
-            .ai-chat {
-                width: 100%;
-                z-index: 1000;
-            }
-        }
-
-        /* File Upload Modal */
-        .modal {
-            display: none;
+        .document-preview {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            align-items: center;
+            background: var(--color-19);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            display: none;
             justify-content: center;
+            align-items: center;
+            z-index: 102;
         }
 
-        .modal-content {
-            background: var(--dark-blue);
-            padding: 2rem;
-            border-radius: 10px;
+        .document-preview.active {
+            display: flex;
+        }
+
+        .preview-content {
+            background: var(--glass);
+            border-radius: 15px;
+            padding: 20px;
             width: 90%;
-            max-width: 500px;
-            border: 1px solid var(--glass-border);
-            position: relative;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow: auto;
         }
 
-        .close-modal {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
+        .preview-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .preview-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-danger {
+            background: #ff4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #cc0000;
+        }
+
+        .preview-body {
+            min-height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px dashed var(--glass-border);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        /* AI Chat Interface */
+        .ai-chat {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 350px;
+            background: var(--glass);
+            border-radius: 15px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 10px 30px var(--color-14);
+            transform: translateY(100px);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            z-index: 103;
+            overflow: hidden;
+        }
+
+        .ai-chat.active {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .ai-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: var(--color-15);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .ai-header h3 {
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ai-close {
             background: none;
             border: none;
-            color: var(--semi-white);
-            font-size: 1.5rem;
+            color: var(--light);
+            font-size: 1.2rem;
             cursor: pointer;
         }
 
-        .close-modal:hover {
-            color: var(--neon-blue);
+        .ai-messages {
+            padding: 15px;
+            height: 350px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
-        .upload-area {
-            border: 2px dashed var(--glass-border);
-            border-radius: 8px;
-            padding: 2rem;
-            text-align: center;
-            margin: 1rem 0;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        .message {
+            max-width: 80%;
+            padding: 10px 15px;
+            border-radius: 15px;
         }
 
-        .upload-area:hover {
-            border-color: var(--neon-blue);
-            background: rgba(14, 239, 255, 0.05);
+        .user-message {
+            align-self: flex-end;
+            background: var(--primary);
+            color: var(--darker);
+            border-bottom-right-radius: 5px;
         }
 
-        .upload-area i {
-            font-size: 2rem;
-            color: var(--neon-blue);
-            margin-bottom: 1rem;
+        .ai-message {
+            align-self: flex-start;
+            background: var(--color-17);
+            border-bottom-left-radius: 5px;
         }
 
-        .file-input {
-            display: none;
+        .ai-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid var(--glass-border);
         }
 
-        .submit-btn {
-            background: var(--neon-blue);
-            color: var(--deep-black);
+        .ai-input input {
+            flex: 1;
+            background: var(--color-15);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 10px 15px;
+            color: var(--light);
+            outline: none;
+        }
+
+        .ai-input button {
+            background: var(--primary);
+            color: var(--darker);
             border: none;
-            padding: 0.7rem 1.5rem;
-            border-radius: 5px;
+            border-radius: 20px;
+            padding: 0 15px;
+            margin-left: 10px;
             cursor: pointer;
-            font-weight: bold;
-            width: 100%;
-            transition: all 0.3s ease;
+            font-weight: 600;
         }
 
-        .submit-btn:hover {
-            box-shadow: 0 0 15px var(--neon-blue);
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .welcome-content h1 {
+                font-size: 2rem;
+            }
+            
+            .welcome-content {
+                padding: 30px 20px;
+            }
+            
+            .health-cards {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .documents-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .ai-chat {
+                width: 90%;
+                bottom: 10px;
+                right: 10px;
+            }
         }
 
-        /* Shared icon style */
-.icon-btn {
-  background: var(--glass-bg, rgba(0, 0, 0, 0.3));
-  border: 1px solid var(--glass-border, #0ef);
-  color: var(--neon-blue, #0ef);
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  font-size: 1.1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: 0.3s ease;
-  cursor: pointer;
-}
+        /* Document types color coding */
+        .document-prescription {
+            border-top: 3px solid var(--color-1);
+        }
 
-.icon-btn:hover {
-  background: var(--neon-blue, #0ef);
-  color: var(--deep-black, #000);
-  box-shadow: 0 0 12px var(--neon-blue, #0ef);
-  transform: scale(1.05);
-}
+        .document-report {
+            border-top: 3px solid var(--color-21);
+        }
 
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
-}
+        .document-scan {
+            border-top: 3px solid #00ff88;
+        }
 
-.logout-btn {
-  display: flex;
-  text-decoration: none;
-}
+        .document-xray {
+            border-top: 3px solid #ff9f43;
+        }
 
-@media (min-width: 992px) {
-  .logout-btn i::after {
-    content: '';
-  }
-}
+        .document-bill {
+            border-top: 3px solid #ff6b6b;
+        }
 
-@media (max-width: 991px) {
-  .logout-btn i::after {
-    margin-left: 6px;
-    text-decoration: none;
-  }
-
-  .logout-btn {
-    padding: 0.5rem 0.9rem;
-    width: auto;
-    border-radius: 10px;
-  }
-}
-
+        .document-insurance {
+            border-top: 3px solid #a55eea;
+        }
     </style>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    
-    <div class="container">
-        <header class="app-header">
-  <div class="app-logo">
-    <i class="fas fa-heartbeat"></i>
-    <h1>Medi<span class="aid">Aid</span></h1>
-  </div>
+    <!-- Floating background bubbles -->
+    <div class="bubbles">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
 
-  <div class="header-actions">
-    <button class="icon-btn open-chat" id="openChat" aria-label="AI Chat">
-      <i class="fas fa-comment-medical"></i>
-    </button>
-
-    <a href="./" class="icon-btn logout-btn" aria-label="Logout">
-      <i class="fas fa-sign-out-alt"></i>
-    </a>
-  </div>
-</header>
-
-        <div class="dashboard">
-            <div class="header">
-                <div class="user-info">
-                    <h1>Welcome, John Doe</h1>
-                    <p>Last login: Today at 10:30 AM</p>
-                </div>
-            </div>
-
-            <div class="cards-container">
-                <div class="card">
-                    <h3>Health Summary</h3>
-                    <p><strong>Blood Type:</strong> O+</p>
-                    <p><strong>Allergies:</strong> Penicillin, Peanuts</p>
-                    <p><strong>Last Checkup:</strong> June 15, 2023</p>
-                </div>
-
-                <div class="card">
-                    <h3>Current Medications</h3>
-                    <p><strong>Lisinopril:</strong> 10mg daily</p>
-                    <p><strong>Atorvastatin:</strong> 20mg at night</p>
-                    <p><strong>Next Refill:</strong> August 5, 2023</p>
-                </div>
-
-                <div class="card">
-                    <h3>Upcoming Appointments</h3>
-                    <p><strong>Dr. Smith:</strong> July 20, 2023</p>
-                    <p><strong>Dental Cleaning:</strong> August 10, 2023</p>
-                    <p><strong>Eye Exam:</strong> September 5, 2023</p>
-                </div>
-            </div>
-
-            <div class="documents-section">
-                <div class="section-header">
-                    <h2>Medical Documents</h2>
-                    <button class="upload-btn" id="uploadBtn">Upload</button>
-                </div>
-                <div class="documents-grid">
-                    <div class="document-item">
-                        <div class="document-icon">
-                            <i class="fas fa-file-pdf"></i>
-                        </div>
-                        <div class="document-info">
-                            <h4>Testing doc</h4>
-                            <p>June 10, 2023</p>
-                        </div>
-                    </div>
-                    <div class="document-item">
-                        <div class="document-icon">
-                            <i class="fas fa-file-image"></i>
-                        </div>
-                        <div class="document-info">
-                            <h4>X-Ray Scan.jpg</h4>
-                            <p>May 25, 2023</p>
-                        </div>
-                    </div>
-                    <div class="document-item">
-                        <div class="document-icon">
-                            <i class="fas fa-file-prescription"></i>
-                        </div>
-                        <div class="document-info">
-                            <h4>Prescription.pdf</h4>
-                            <p>May 15, 2023</p>
-                        </div>
-                    </div>
-                    <div class="document-item">
-                        <div class="document-icon">
-                            <i class="fas fa-file-contract"></i>
-                        </div>
-                        <div class="document-info">
-                            <h4>Insurance.pdf</h4>
-                            <p>January 1, 2023</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- AI Chat Section -->
-        <div class="ai-chat" id="aiChat">
-            <div class="ai-header">
-                <div class="ai-icon">
-                    <i class="fas fa-heartbeat"></i>
-                </div>
-                <div class="ai-title">
-                    <h3>MediAid AI Assistant</h3>
-                    <p>Your personal health companion</p>
-                </div>
-                <c class="close-chat" id="closeChat">
-                    <i class="fas fa-times"></i>
-            </c>
-            </div>
-            <div class="chat-messages" id="chatMessages">
-                <div class="message ai-message">
-                    Hello! I'm MediAid AI. How can I assist you with your health today?
-                </div>
-            </div>
-            <div class="chat-input">
-                <input type="text" id="userMessage" placeholder="Type your message here...">
-                <button class="send-btn" id="sendMessage">
-                    <i class="fas fa-paper-plane"> Send</i>
+    <!-- Welcome Overlay -->
+    <div class="welcome-overlay" id="welcomeOverlay">
+        <div class="welcome-content glass-card">
+            <h1>Welcome, <span class="gradient-text">John Doe</span></h1>
+            <p>Upload any health record updates you have to enjoy the best of our MediAid services. Our AI will analyze your documents and provide insights to help you manage your health better.</p>
+            <div class="welcome-buttons">
+                <button class="btn btn-primary" id="uploadBtn">
+                    <i class="fas fa-upload"></i> Upload
+                </button>
+                <button class="btn btn-outline" id="noThanksBtn">
+                    No Thanks
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- File Upload Modal -->
-    <div class="modal" id="uploadModal">
-        <div class="modal-content">
-            <button class="close-modal" id="closeModal">&times;</button>
-            <h2>Upload Medical Document</h2>
-            <p>Upload your health insurance or medical records (PDF, JPG, PNG)</p>
+    <!-- Upload Modal -->
+    <div class="upload-modal glass-card" id="uploadModal">
+        <button class="close-modal" id="closeUploadModal">&times;</button>
+        <h2><i class="fas fa-cloud-upload-alt"></i> Upload Health Records</h2>
+        <p>Upload your prescriptions, reports, scans, or any other medical documents for analysis and secure storage.</p>
+        
+        <div class="upload-area" id="uploadArea">
+            <i class="fas fa-file-medical"></i>
+            <h3>Drag & Drop Your Files Here</h3>
+            <p>or</p>
+            <input type="file" id="fileInput" style="display: none;" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+            <button class="btn btn-outline" onclick="document.getElementById('fileInput').click()">Browse Files</button>
+        </div>
+        
+        <button class="btn btn-primary" id="confirmUpload" disabled>
+            Upload & Analyze
+        </button>
+    </div>
+
+    <!-- Document Preview Modal -->
+    <div class="document-preview" id="documentPreview">
+        <div class="preview-content glass-card">
+            <div class="preview-header">
+                <h2 id="previewTitle">Document Preview</h2>
+                <div class="preview-actions">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-chart-line"></i> Analyze
+                    </button>
+                    <button class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                    <button class="btn btn-outline" id="closePreview">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                </div>
+            </div>
+            <div class="preview-body" id="previewBody">
+                <p>Document content will appear here</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Chat Interface -->
+    <div class="ai-chat" id="aiChat">
+        <div class="ai-header">
+            <h3><i class="fas fa-robot"></i> MediAid Assistant</h3>
+            <button class="ai-close" id="closeAiChat">&times;</button>
+        </div>
+        <div class="ai-messages" id="aiMessages">
+            <div class="message ai-message">
+                Hello! I'm your MediAid assistant. How can I help you with your health records today?
+            </div>
+        </div>
+        <div class="ai-input">
+            <input type="text" id="aiInput" placeholder="Ask me about your health records...">
+            <button id="aiSend"><i class="fas fa-paper-plane"></i>Send</button>
+        </div>
+    </div>
+
+    <!-- Main Dashboard -->
+    <div class="container">
+        <nav>
+            <a href="#" class="logo">
+                Medi<span>Aid</span>
+            </a>
+            <div class="nav-buttons">
+                <button class="btn btn-outline" id="aiButton">
+                    <i class="fas fa-robot"></i> AI Assistant
+                </button>
+                <button class="btn btn-outline">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </nav>
+        <!-- Ugoeze, when you get here, you will clear this deafult contents as the user has not uploaded any -->
+        <div class="dashboard">
+            <h1>Health Dashboard</h1>
+            <p>Welcome back, John. Here's an overview of your health records.</p>
             
-            <label for="fileInput" class="upload-area" id="uploadArea">
-                <i class="fas fa-cloud-upload-alt"></i>
-                <p>Click to browse or drag and drop files here</p>
-                <p id="fileName">No file selected</p>
-            </label>
-            <input type="file" id="fileInput" class="file-input" accept=".pdf,.jpg,.jpeg,.png">
-            
-            <button class="submit-btn" id="submitUpload">Upload Document</button>
+            <div class="dashboard-grid">
+                <div class="dashboard-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-heartbeat"></i> Health Summary</h2>
+                    </div>
+                    <div class="health-cards">
+                        <div class="health-card">
+                            <i class="fas fa-calendar-check"></i>
+                            <h3>Upcoming Appointments</h3>
+                            <p>2 scheduled visits</p>
+                        </div>
+                        <div class="health-card">
+                            <i class="fas fa-allergies"></i>
+                            <h3>Allergies</h3>
+                            <p>3 recorded allergies</p>
+                        </div>
+                        <div class="health-card">
+                            <i class="fas fa-pills"></i>
+                            <h3>Medications</h5>
+                            <p>5 active prescriptions</p>
+                        </div>
+                        <div class="health-card">
+                            <i class="fas fa-file-invoice-dollar"></i>
+                            <h3>Insurance</h3>
+                            <p>Active until 12/2024</p>
+                        </div>
+                        <div class="health-card">
+                            <i class="fas fa-virus"></i>
+                            <h3>Conditions</h3>
+                            <p>2 active conditions</p>
+                        </div>
+                        <div class="health-card">
+                            <i class="fas fa-procedures"></i>
+                            <h3>Procedures</h3>
+                            <p>3 medical procedures</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-section">
+                    <div class="section-header">
+                        <h2><i class="fas fa-bell"></i> Notifications</h2>
+                    </div>
+                    <div class="notification-list">
+                        <div class="notification" style="padding: 10px; border-bottom: 1px solid var(--glass-border); margin-bottom: 10px;">
+                            <div><i class="fas fa-syringe" style="color: var(--primary);"></i> Flu shot due in 2 weeks</div>
+                            <small style="opacity: 0.7;">2 days ago</small>
+                        </div>
+                        <div class="notification" style="padding: 10px; border-bottom: 1px solid var(--glass-border); margin-bottom: 10px;">
+                            <div><i class="fas fa-prescription-bottle" style="color: var(--primary);"></i> Refill available for Metformin</div>
+                            <small style="opacity: 0.7;">1 week ago</small>
+                        </div>
+                        <div class="notification" style="padding: 10px; margin-bottom: 10px;">
+                            <div><i class="fas fa-stethoscope" style="color: var(--primary);"></i> Dr. Smith reviewed your latest results</div>
+                            <small style="opacity: 0.7;">2 weeks ago</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-section">
+                <div class="section-header">
+                    <h2><i class="fas fa-folder"></i> Recent Documents</h2>
+                    <button class="btn btn-outline">
+                        View All <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+                <div class="documents-grid">
+                    <div class="document-card document-prescription" data-doc="prescription">
+                        <i class="fas fa-prescription-bottle-alt"></i>
+                        <div class="document-name">Prescription - Dr. Smith.pdf</div>
+                    </div>
+                    <div class="document-card document-report" data-doc="blood">
+                        <i class="fas fa-vial"></i>
+                        <div class="document-name">Blood Test Results.pdf</div>
+                    </div>
+                    <div class="document-card document-scan" data-doc="mri">
+                        <i class="fas fa-magnet"></i>
+                        <div class="document-name">MRI Scan Results.pdf</div>
+                    </div>
+                    <div class="document-card document-xray" data-doc="xray">
+                        <i class="fas fa-x-ray"></i>
+                        <div class="document-name">Chest X-Ray.jpg</div>
+                    </div>
+                    <div class="document-card document-bill" data-doc="bill">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                        <div class="document-name">Hospital Bill.pdf</div>
+                    </div>
+                    <div class="document-card document-insurance" data-doc="insurance">
+                        <i class="fas fa-shield-alt"></i>
+                        <div class="document-name">Insurance Claim.pdf</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-
-        
-        // Chat functionality
-        const openChatBtn = document.getElementById('openChat');
-        const closeChatBtn = document.getElementById('closeChat');
-        const aiChat = document.getElementById('aiChat');
-        const chatMessages = document.getElementById('chatMessages');
-        const userMessageInput = document.getElementById('userMessage');
-        const sendMessageBtn = document.getElementById('sendMessage');
-
-        // Upload modal functionality
+        // DOM Elements
+        const welcomeOverlay = document.getElementById('welcomeOverlay');
         const uploadBtn = document.getElementById('uploadBtn');
+        const noThanksBtn = document.getElementById('noThanksBtn');
         const uploadModal = document.getElementById('uploadModal');
-        const closeModalBtn = document.getElementById('closeModal');
+        const closeUploadModal = document.getElementById('closeUploadModal');
         const uploadArea = document.getElementById('uploadArea');
         const fileInput = document.getElementById('fileInput');
-        const fileName = document.getElementById('fileName');
-        const submitUploadBtn = document.getElementById('submitUpload');
+        const confirmUpload = document.getElementById('confirmUpload');
+        const documentPreview = document.getElementById('documentPreview');
+        const closePreview = document.getElementById('closePreview');
+        const aiChat = document.getElementById('aiChat');
+        const aiButton = document.getElementById('aiButton');
+        const closeAiChat = document.getElementById('closeAiChat');
+        const aiMessages = document.getElementById('aiMessages');
+        const aiInput = document.getElementById('aiInput');
+        const aiSend = document.getElementById('aiSend');
+        const documentCards = document.querySelectorAll('.document-card');
 
-        // Toggle chat
-        openChatBtn.addEventListener('click', () => {
-            aiChat.classList.toggle('active');
-            document.body.style.overflow = aiChat.classList.contains('active') ? 'hidden' : 'auto';
-        });
+        // Check if user has seen welcome before (would normally use localStorage)
+        let firstVisit = true; // In a real app, check localStorage here
 
-        closeChatBtn.addEventListener('click', () => {
-            aiChat.classList.remove('active');
-            document.body.style.overflow = 'auto';
-        });
-
-        // Send message
-        function sendMessage() {
-            const message = userMessageInput.value.trim();
-            if (message) {
-                // Add user message
-                const userMessage = document.createElement('div');
-                userMessage.className = 'message user-message';
-                userMessage.textContent = message;
-                chatMessages.appendChild(userMessage);
-                
-                // Clear input
-                userMessageInput.value = '';
-                
-                // Scroll to bottom
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-                
-                // Simulate AI response after delay
-                setTimeout(() => {
-                    const aiResponse = document.createElement('div');
-                    aiResponse.className = 'message ai-message';
-                    
-                    // Simple responses based on keywords
-                    if (message.toLowerCase().includes('appointment')) {
-                        aiResponse.textContent = "I can help you schedule an appointment. Would you like me to check available slots with your doctor?";
-                    } else if (message.toLowerCase().includes('medication') || message.toLowerCase().includes('prescription')) {
-                        aiResponse.textContent = "Your current medications are Lisinopril 10mg daily and Atorvastatin 20mg at night. Your next refill is on August 5, 2023.";
-                    } else if (message.toLowerCase().includes('insurance')) {
-                        aiResponse.textContent = "Your insurance document is on file and expires December 31, 2023. Would you like me to help you with a renewal?";
-                    } else {
-                        aiResponse.textContent = "I've noted your question. For more detailed medical advice, I recommend consulting with your healthcare provider directly.";
-                    }
-                    
-                    chatMessages.appendChild(aiResponse);
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-                }, 1000);
-            }
-        }
-
-        sendMessageBtn.addEventListener('click', sendMessage);
-        userMessageInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                sendMessage();
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            if (firstVisit) {
+                welcomeOverlay.classList.remove('hidden');
             }
         });
 
-        // Upload modal
+        // Welcome overlay buttons
         uploadBtn.addEventListener('click', () => {
-            uploadModal.style.display = 'flex';
+            welcomeOverlay.classList.add('hidden');
+            uploadModal.classList.add('active');
         });
 
-        closeModalBtn.addEventListener('click', () => {
-            uploadModal.style.display = 'none';
+        noThanksBtn.addEventListener('click', () => {
+            welcomeOverlay.classList.add('hidden');
+            // This should be saved in localStorage to not show again, cause we do not want the welcome page to be showing each time the user refreshes the page
         });
 
-        // Handle file selection
-        fileInput.addEventListener('change', () => {
-            if (fileInput.files.length > 0) {
-                fileName.textContent = fileInput.files[0].name;
-            } else {
-                fileName.textContent = 'No file selected';
-            }
+        // Upload modal functionality
+        closeUploadModal.addEventListener('click', () => {
+            uploadModal.classList.remove('active');
         });
 
-        // Drag and drop
+        uploadArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+
         uploadArea.addEventListener('dragover', (e) => {
             e.preventDefault();
-            uploadArea.style.borderColor = 'var(--neon-blue)';
-            uploadArea.style.backgroundColor = 'rgba(14, 239, 255, 0.1)';
+            uploadArea.style.borderColor = 'var(--primary)';
+            uploadArea.style.background = 'var(--color-20)';
         });
 
         uploadArea.addEventListener('dragleave', () => {
             uploadArea.style.borderColor = 'var(--glass-border)';
-            uploadArea.style.backgroundColor = 'transparent';
+            uploadArea.style.background = 'transparent';
         });
 
         uploadArea.addEventListener('drop', (e) => {
             e.preventDefault();
             uploadArea.style.borderColor = 'var(--glass-border)';
-            uploadArea.style.backgroundColor = 'transparent';
+            uploadArea.style.background = 'transparent';
             
             if (e.dataTransfer.files.length) {
                 fileInput.files = e.dataTransfer.files;
-                fileName.textContent = fileInput.files[0].name;
+                handleFileSelection();
             }
         });
 
-        // Submit upload
-        submitUploadBtn.addEventListener('click', () => {
+        fileInput.addEventListener('change', handleFileSelection);
+
+        function handleFileSelection() {
             if (fileInput.files.length > 0) {
-                alert(`File "${fileInput.files[0].name}" uploaded successfully!`);
-                uploadModal.style.display = 'none';
-                
-                // Add to documents grid (simulated)
-                const documentsGrid = document.querySelector('.documents-grid');
-                const newDoc = document.createElement('div');
-                newDoc.className = 'document-item';
-                newDoc.innerHTML = `
-                    <div class="document-icon">
-                        <i class="fas fa-file-${fileInput.files[0].name.endsWith('.pdf') ? 'pdf' : 'image'}"></i>
-                    </div>
-                    <div class="document-info">
-                        <h4>${fileInput.files[0].name}</h4>
-                        <p>${new Date().toLocaleDateString()}</p>
-                    </div>
+                const file = fileInput.files[0];
+                uploadArea.innerHTML = `
+                    <i class="fas fa-file-alt"></i>
+                    <h3>${file.name}</h3>
+                    <p>${(file.size / 1024).toFixed(2)} KB</p>
                 `;
-                documentsGrid.insertBefore(newDoc, documentsGrid.firstChild);
+                confirmUpload.disabled = false;
+            }
+        }
+
+        confirmUpload.addEventListener('click', () => {
+            // In a real app, you would upload the file here
+            alert('File uploaded successfully! We will analyze it soon.');
+            uploadModal.classList.remove('active');
+            
+            // Add to recent documents (simulated)
+            setTimeout(() => {
+                const docsGrid = document.querySelector('.documents-grid');
+                const newDoc = document.createElement('div');
+                newDoc.className = 'document-card document-report';
+                newDoc.innerHTML = `
+                    <i class="fas fa-file-medical"></i>
+                    <div class="document-name">Uploaded: ${fileInput.files[0].name}</div>
+                `;
+                newDoc.addEventListener('click', showDocumentPreview);
                 
-                // Reset
-                fileInput.value = '';
-                fileName.textContent = 'No file selected';
-            } else {
-                alert('Please select a file to upload');
+                // Remove the oldest document if we have 6
+                if (docsGrid.children.length >= 6) {
+                    docsGrid.removeChild(docsGrid.lastChild);
+                }
+                
+                // Add to the beginning
+                docsGrid.insertBefore(newDoc, docsGrid.firstChild);
+            }, 1000);
+        });
+
+        // Document preview functionality
+        documentCards.forEach(card => {
+            card.addEventListener('click', showDocumentPreview);
+        });
+
+        function showDocumentPreview() {
+            const docType = this.getAttribute('data-doc') || 'prescription';
+            const docName = this.querySelector('.document-name').textContent;
+            
+            document.getElementById('previewTitle').textContent = docName;
+            
+            // a demo to simulate different document types
+            let content = '';
+            switch(docType) {
+                case 'prescription':
+                    content = `
+                        <div style="font-family: monospace; white-space: pre; text-align: left;">
+                            <h3>DR. SMITH'S OFFICE</h3>
+                            <p>123 Medical Center Drive</p>
+                            <p>--------------------------------</p>
+                            <p>PATIENT: John Doe</p>
+                            <p>DATE: ${new Date().toLocaleDateString()}</p>
+                            <p>--------------------------------</p>
+                            <p>RX: Metformin 500mg</p>
+                            <p>Sig: Take one tablet twice daily with meals</p>
+                            <p>Refills: 3</p>
+                            <p>--------------------------------</p>
+                            <p>DR. SMITH - License #12345</p>
+                        </div>
+                    `;
+                    break;
+                case 'blood':
+                    content = `
+                        <div style="text-align: left;">
+                            <h3>BLOOD TEST RESULTS</h3>
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <tr style="border-bottom: 1px solid var(--glass-border);">
+                                    <th style="text-align: left; padding: 5px;">Test</th>
+                                    <th style="text-align: left; padding: 5px;">Result</th>
+                                    <th style="text-align: left; padding: 5px;">Range</th>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 5px;">Glucose</td>
+                                    <td style="padding: 5px;">102 mg/dL</td>
+                                    <td style="padding: 5px;">70-100</td>
+                                </tr>
+                                <tr style="background: var(--color-15);">
+                                    <td style="padding: 5px;">Cholesterol</td>
+                                    <td style="padding: 5px;">190 mg/dL</td>
+                                    <td style="padding: 5px;">< 200</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 5px;">HDL</td>
+                                    <td style="padding: 5px;">45 mg/dL</td>
+                                    <td style="padding: 5px;">> 40</td>
+                                </tr>
+                            </table>
+                        </div>
+                    `;
+                    break;
+                case 'mri':
+                    content = `
+                        <div style="text-align: center;">
+                            <h3>MRI SCAN REPORT</h3>
+                            <p>Scanned on: ${new Date().toLocaleDateString()}</p>
+                            <div style="margin: 20px auto; width: 200px; height: 150px; background: linear-gradient(135deg, #333, #666);"></div>
+                            <p>Findings: No abnormalities detected</p>
+                            <p>Impression: Normal study</p>
+                        </div>
+                    `;
+                    break;
+                case 'xray':
+                    content = `
+                        <div style="text-align: center;">
+                            <h3>CHEST X-RAY</h3>
+                            <p>Dated: ${new Date().toLocaleDateString()}</p>
+                            <div style="margin: 20px auto; width: 200px; height: 150px; background: linear-gradient(135deg, #444, #888);"></div>
+                            <p>Findings: Lungs clear, no active disease</p>
+                            <p>Cardiac silhouette normal</p>
+                        </div>
+                    `;
+                    break;
+                default:
+                    content = `
+                        <p>This is a preview of "${docName}". In a real application, this would display the actual document.</p>
+                        <p>You can click "Analyze" to get AI-powered insights about this document.</p>
+                    `;
+            }
+            
+            document.getElementById('previewBody').innerHTML = content;
+            documentPreview.classList.add('active');
+        }
+
+        closePreview.addEventListener('click', () => {
+            documentPreview.classList.remove('active');
+        });
+
+        // AI Chat functionality
+        aiButton.addEventListener('click', () => {
+            aiChat.classList.toggle('active');
+        });
+
+        closeAiChat.addEventListener('click', () => {
+            aiChat.classList.remove('active');
+        });
+
+        function addMessage(message, isUser) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'ai-message'}`;
+            messageDiv.textContent = message;
+            aiMessages.appendChild(messageDiv);
+            aiMessages.scrollTop = aiMessages.scrollHeight;
+        }
+
+        aiSend.addEventListener('click', () => {
+            const message = aiInput.value.trim();
+            if (message) {
+                addMessage(message, true);
+                aiInput.value = '';
+                
+                // Simulate AI response
+                setTimeout(() => {
+                    const responses = [
+                        "I've reviewed your health records and everything looks good overall.",
+                        "Would you like me to explain anything in particular about your medications?",
+                        "I notice you have an upcoming appointment. Would you like details?",
+                        "Your recent blood test results show slightly elevated glucose levels. I can suggest dietary recommendations if you'd like.",
+                        "You have 2 active prescriptions right now. Do you need refills for any medications?"
+                    ];
+                    
+                    const response = responses[Math.floor(Math.random() * responses.length)];
+                    addMessage(response, false);
+                }, 1000);
             }
         });
 
-        // Click upload area to trigger file input
-        uploadArea.addEventListener('click', () => {
-            fileInput.click();
-        });
-
-        // Close modal when clicking outside
-        window.addEventListener('click', (e) => {
-            if (e.target === uploadModal) {
-                uploadModal.style.display = 'none';
+        aiInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                aiSend.click();
             }
         });
     </script>
