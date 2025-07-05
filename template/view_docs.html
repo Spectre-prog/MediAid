@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediAid - Document View</title>
+    <link rel="icon" href="../static/img/icon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-1: #0ef;
+            --color-2: #08c;
+            --color-3: #0f172a;
+            --color-4: #020617;
+            --color-5: #f8fafc;
+            --color-6: rgba(255, 255, 255, 0.05);
+            --color-7: rgba(255, 255, 255, 0.1);
+            --color-8: rgba(0, 238, 255, 0.3);
+            --color-9: rgba(0, 238, 255, 0.6);
+            --color-10: rgba(0, 0, 0, 0.2);
+            --color-11: rgba(2, 6, 23, 0.9);
+            --color-12: rgba(0, 0, 0, 0.3);
+            --color-13: #fff;
+            --color-14: rgba(0, 0, 0, 0.4);
+            --color-15: rgba(0, 238, 255, 0.15);
+            --color-16: rgba(0,0,0,0.3);
+            --color-17: rgba(0, 238, 255, 0.1);
+            --color-18: rgba(0, 238, 255, 0.2);
+            --color-19: rgba(0, 0, 0, 0.7);
+            --color-20: rgba(0, 238, 255, 0.03);
+            --color-21: #ff00aa;
+            --color-22: rgba(0, 238, 255, 0.05);
+            --color-23: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Base Styles */
+        :root {
+            --primary: var(--color-1);
+            --primary-dark: var(--color-2);
+            --dark: var(--color-3);
+            --darker: var(--color-4);
+            --light: var(--color-5);
+            --glass: var(--color-6);
+            --glass-border: var(--color-7);
+        }
+
+        /* General Styles */
+        body {
+            background-color: var(--darker);
+            color: var(--light);
+            min-height: 100vh;
+            font-family: sans-serif;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Bubble Animation */
+        .bubbles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bubble {
+            position: absolute;
+            bottom: -100px;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0.5;
+            filter: blur(5px);
+            animation: rise 15s infinite ease-in;
+        }
+
+        .bubble:nth-child(1) {
+            width: 40px;
+            height: 40px;
+            left: 10%;
+            animation-duration: 8s;
+            background: var(--color-8);
+        }
+
+        .bubble:nth-child(2) {
+            width: 20px;
+            height: 20px;
+            left: 20%;
+            animation-duration: 5s;
+            animation-delay: 1s;
+            background: var(--color-9);
+        }
+
+        .bubble:nth-child(3) {
+            width: 50px;
+            height: 50px;
+            left: 35%;
+            animation-duration: 7s;
+            animation-delay: 2s;
+            background: var(--color-17);
+        }
+
+        .bubble:nth-child(4) {
+            width: 80px;
+            height: 80px;
+            left: 50%;
+            animation-duration: 11s;
+            animation-delay: 0s;
+            background: var(--color-18);
+        }
+
+        .bubble:nth-child(5) {
+            width: 35px;
+            height: 35px;
+            left: 55%;
+            animation-duration: 6s;
+            animation-delay: 1s;
+            background: var(--color-15);
+        }
+
+        .bubble:nth-child(6) {
+            width: 45px;
+            height: 45px;
+            left: 65%;
+            animation-duration: 8s;
+            animation-delay: 3s;
+            background: var(--color-22);
+        }
+
+        .bubble:nth-child(7) {
+            width: 25px;
+            height: 25px;
+            left: 75%;
+            animation-duration: 7s;
+            animation-delay: 2s;
+            background: var(--color-20);
+        }
+
+        .bubble:nth-child(8) {
+            width: 80px;
+            height: 80px;
+            left: 80%;
+            animation-duration: 6s;
+            animation-delay: 1s;
+            background: var(--color-8);
+        }
+
+        @keyframes rise {
+            0% {
+                bottom: -100px;
+                transform: translateX(0);
+            }
+            50% {
+                transform: translateX(100px);
+            }
+            100% {
+                bottom: 1080px;
+                transform: translateX(-200px);
+            }
+        }
+
+        /* Glass Card Effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        /* Document Card Hover Effect */
+        .document-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .document-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 238, 255, 0.2);
+        }
+
+        /* Modal Animation */
+        .modal {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--darker);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Document Icon Colors */
+        .pdf-icon {
+            color: #FF0000;
+        }
+
+        .png-icon {
+            color: #4CAF50;
+        }
+
+        .jpg-icon {
+            color: #2196F3;
+        }
+
+        .jpeg-icon {
+            color: #673AB7;
+        }
+
+        /* Header Styles */
+        header {
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            font-size: 1.875rem;
+            color: var(--primary);
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .upload-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            background-color: var(--primary);
+            color: var(--darker);
+            transition: all 0.3s;
+        }
+
+        .upload-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .user-avatar {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 9999px;
+            background-color: var(--primary);
+            color: var(--darker);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Main Content Styles */
+        main {
+            padding: 2rem 1rem;
+        }
+
+        /* Search and Filter */
+        .search-filter-container {
+            margin-bottom: 2rem;
+        }
+
+        .search-filter-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .search-filter-content {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+
+        .search-container {
+            position: relative;
+            width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .search-container {
+                width: 50%;
+            }
+        }
+
+        .search-input {
+            width: 100%;
+            padding-left: 2.5rem;
+            padding-right: 1rem;
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+            border-radius: 9999px;
+            background-color: var(--color-11);
+            border: 1px solid var(--glass-border);
+        }
+
+        .search-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 0.75rem;
+            top: 0.875rem;
+            color: var(--primary);
+        }
+
+        .filter-container {
+            display: flex;
+            gap: 0.5rem;
+            width: 100%;
+            border-radius: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .filter-container {
+                width: auto;
+            }
+        }
+
+        .filter-select {
+            padding: 0.75rem 1rem;
+            border-radius: 3rem;
+            background-color: var(--color-11);
+            border: 1px solid var(--glass-border);
+            color: #ffff;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: large;
+
+        }
+
+        .filter-select:hover {
+            box-shadow: 0 0 0 2px var(--primary);
+            cursor: pointer;
+            transition: .5s;
+        }
+
+        option {
+            padding: 2rem;
+            gap: 2rem;
+            border-radius: 1.5rem;
+            border: 2px solid #fff;
+            color: white;
+            font-size: medium;
+            font-weight: 650;
+        }
+
+        option:hover {
+            color: #0ef;
+            border: 2px solid #0ef;
+            transition: .5s;
+        }
+
+
+        /* Documents Grid */
+        .documents-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-icon {
+            margin-right: 0.5rem;
+            color: var(--primary);
+        }
+
+        .documents-grid {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 640px) {
+            .documents-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 768px) {
+            .documents-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .documents-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (min-width: 1280px) {
+            .documents-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
+        }
+
+        .document-card-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .document-icon {
+            font-size: 3rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .document-name {
+            font-weight: 500;
+            width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .document-meta {
+            font-size: 0.875rem;
+            color: var(--color-13);
+            opacity: 0.7;
+        }
+
+        /* Recent Activity */
+        .activity-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            transition: all 0.3s;
+        }
+
+        .activity-item:hover {
+            background-color: var(--color-15);
+            border-radius: 0.5rem;
+        }
+
+        .activity-icon-container {
+            background-color: var(--color-17);
+            padding: 0.5rem;
+            border-radius: 9999px;
+            margin-right: 0.75rem;
+        }
+
+        .activity-icon {
+            color: var(--primary);
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-text {
+            font-weight: 500;
+        }
+
+        .activity-highlight {
+            color: var(--primary);
+        }
+
+        .activity-date {
+            font-size: 0.875rem;
+            color: var(--color-13);
+            opacity: 0.7;
+        }
+
+        /* Document Modal */
+        #documentModal {
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            display: none;
+        }
+
+        .modal-overlay {
+            position: absolute;
+            inset: 0;
+            background-color: var(--color-19);
+            -webkit-backdrop-filter: blur(4px);
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            max-width: 90%;
+            width: 100%;
+            margin: 2rem;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 238, 255, 0.2);
+            border: 1px solid rgba(0, 238, 255, 0.3);
+        }
+
+        @media (min-width: 768px) {
+            .modal-content {
+                max-width: 75%;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .modal-content {
+                max-width: 60%;
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            color: var(--primary);
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: var(--primary-dark);
+        }
+
+        .modal-body {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .modal-body {
+                flex-direction: row;
+            }
+        }
+
+        .document-preview-container {
+            flex: 1;
+        }
+
+        .preview-placeholder {
+            background-color: var(--color-11);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 16rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .preview-placeholder {
+                height: 24rem;
+            }
+        }
+
+        .document-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .document-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .document-meta-info {
+            font-size: 0.875rem;
+            color: var(--color-13);
+            opacity: 0.7;
+        }
+
+        .document-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            transition: all 0.3s;
+        }
+
+        .download-btn {
+            background-color: var(--primary);
+            color: var(--darker);
+        }
+
+        .download-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .share-btn {
+            background-color: var(--color-11);
+            border: 1px solid var(--glass-border);
+        }
+
+        .share-btn:hover {
+            background-color: var(--color-12);
+        }
+
+        .sidebar {
+            width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .sidebar {
+                width: 16rem;
+            }
+        }
+
+        .sidebar-section {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .sidebar-title {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .details-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .detail-label {
+            opacity: 0.7;
+        }
+
+        .actions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .full-width-btn {
+            width: 100%;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .analyse-btn {
+            background-color: var(--primary);
+            color: var(--darker);
+        }
+
+        .analyse-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .delete-btn {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background-color: #dc2626;
+        }
+
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            padding: 0.25rem 0.5rem;
+            background-color: var(--color-17);
+            color: var(--primary);
+            border-radius: 9999px;
+            font-size: 0.75rem;
+        }
+
+        .opt {
+            color: #fff;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: medium;
+        }
+
+        .mobile-links {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        padding: 0;
+        margin: 0;
+        }
+
+        .mobile-links li a {
+        display: block;
+        width: 8rem;
+        padding: 0.5rem 1rem;
+        color: var(--color-13);
+        text-align: center;
+        font-weight: 600;
+        font-size: 0.95rem;
+        background: var(--color-14);
+        -webkit-backdrop-filter: blur(12px);
+        backdrop-filter: blur(12px);
+        border: 1px solid var(--color-1);
+        border-radius: 10px;
+        text-decoration: none;
+        opacity: 0;
+        transform: scale(0.95);
+        transition: 0.3s, transform 0.3s, opacity 0.3s;
+        }
+
+        .mobile-links li a:hover {
+        background: var(--color-15);
+        transform: scale(1.05);
+        }
+    </style> 
+</head>
+<body>
+    <!-- Bubble Background Animation -->
+    <div class="bubbles">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="glass-card" style="position: sticky; top: 0; z-index: 50;">
+        <div class="container header-content" style="padding: 1rem 0;">
+            <div class="logo-container">
+                <i class="fas fa-heartbeat logo-icon"></i>
+                <h1 class="logo-text">MediAid</h1>
+            </div>
+            <div class="header-actions">
+                <button class="upload-btn">
+                    <i class="fas fa-plus" style="margin-right: 0.5rem;"></i> Upload
+                </button>
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container" style="padding-top: 2rem;">
+        <!-- Search and Filter -->
+        <div class="glass-card search-filter-container" style="padding: 1.5rem; border-radius: 0.75rem; margin-bottom: 2rem;">
+            <div class="search-filter-content">
+                <div class="search-container">
+                    <input type="text" placeholder="Search documents..." class="search-input">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+                <div class="filter-container">
+                    <select class="filter-select">
+                        <ul class="mobile-links">
+                            <option>All Types</option>
+                            <option>PDF</option>
+                            <option>PNG</option>
+                            <option>JPG</option>
+                            <option>JPEG</option>
+                        </ul>
+                    </select>
+                    <select class="filter-select">
+                        <ul class="mobile-links">
+                            <option>Sort by Date</option>
+                            <option>Sort by Name</option>
+                            <option>Sort by Size</option>
+                        </ul>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Documents Grid -->
+        <div class="documents-section">
+            <h2 class="section-title">
+                <i class="fas fa-folder-open section-icon"></i> My Documents
+            </h2>
+            <div class="documents-grid">
+                <!-- Document Cards -->
+                <div class="document-card glass-card" style="border-radius: 0.75rem;" onclick="openDocument('Medical Report.pdf', 'pdf')">
+                    <div class="document-card-content">
+                        <i class="fas fa-file-pdf pdf-icon document-icon"></i>
+                        <h3 class="document-name">Medical Report.pdf</h3>
+                        <p class="document-meta">2.4 MB • 3 days ago</p>
+                    </div>
+                </div>
+
+                <div class="document-card glass-card" style="border-radius: 0.75rem;" onclick="openDocument('X-Ray Scan.png', 'png')">
+                    <div class="document-card-content">
+                        <i class="fas fa-file-image png-icon document-icon"></i>
+                        <h3 class="document-name">X-Ray Scan.png</h3>
+                        <p class="document-meta">1.8 MB • 1 week ago</p>
+                    </div>
+                </div>
+
+                <div class="document-card glass-card" style="border-radius: 0.75rem;" onclick="openDocument('Prescription.jpg', 'jpg')">
+                    <div class="document-card-content">
+                        <i class="fas fa-file-image jpg-icon document-icon"></i>
+                        <h3 class="document-name">Prescription.jpg</h3>
+                        <p class="document-meta">0.9 MB • 2 weeks ago</p>
+                    </div>
+                </div>
+
+                <div class="document-card glass-card" style="border-radius: 0.75rem;" onclick="openDocument('Lab Results.jpeg', 'jpeg')">
+                    <div class="document-card-content">
+                        <i class="fas fa-file-image jpeg-icon document-icon"></i>
+                        <h3 class="document-name">Lab Results.jpeg</h3>
+                        <p class="document-meta">3.2 MB • 1 month ago</p>
+                    </div>
+                </div>
+
+                <div class="document-card glass-card" style="border-radius: 0.75rem;" onclick="openDocument('Insurance.pdf', 'pdf')">
+                    <div class="document-card-content">
+                        <i class="fas fa-file-pdf pdf-icon document-icon"></i>
+                        <h3 class="document-name">Insurance.pdf</h3>
+                        <p class="document-meta">4.1 MB • 2 months ago</p>
+                    </div>
+                </div>
+
+                <div class="document-card glass-card" style="border-radius: 0.75rem;" onclick="openDocument('MRI Scan.png', 'png')">
+                    <div class="document-card-content">
+                        <i class="fas fa-file-image png-icon document-icon"></i>
+                        <h3 class="document-name">MRI Scan.png</h3>
+                        <p class="document-meta">5.7 MB • 3 months ago</p>
+                    </div>
+                </div>
+
+                <div class="document-card glass-card" style="border-radius: 0.75rem;" onclick="openDocument('Blood Test.jpg', 'jpg')">
+                    <div class="document-card-content">
+                        <i class="fas fa-file-image jpg-icon document-icon"></i>
+                        <h3 class="document-name">Blood Test.jpg</h3>
+                        <p class="document-meta">1.2 MB • 4 months ago</p>
+                    </div>
+                </div>
+
+                <div class="document-card glass-card" style="border-radius: 0.75rem;" onclick="openDocument('Vaccination Record.pdf', 'pdf')">
+                    <div class="document-card-content">
+                        <i class="fas fa-file-pdf pdf-icon document-icon"></i>
+                        <h3 class="document-name">Vaccination Record.pdf</h3>
+                        <p class="document-meta">2.9 MB • 5 months ago</p>
+                    </div>
+                </div>
+
+                <div class="document-card glass-card" style="border-radius: 0.75rem;" onclick="openDocument('Ultrasound.jpeg', 'jpeg')">
+                    <div class="document-card-content">
+                        <i class="fas fa-file-image jpeg-icon document-icon"></i>
+                        <h3 class="document-name">Ultrasound.jpeg</h3>
+                        <p class="document-meta">3.5 MB • 6 months ago</p>
+                    </div>
+                </div>
+
+                <div class="document-card glass-card" style="border-radius: 0.75rem;" onclick="openDocument('Dental Records.pdf', 'pdf')">
+                    <div class="document-card-content">
+                        <i class="fas fa-file-pdf pdf-icon document-icon"></i>
+                        <h3 class="document-name">Dental Records.pdf</h3>
+                        <p class="document-meta">1.7 MB • 7 months ago</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="glass-card" style="padding: 1.5rem; border-radius: 0.75rem;">
+            <h2 class="section-title">
+                <i class="fas fa-history section-icon"></i> Recent Activity
+            </h2>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div class="activity-item">
+                    <div class="activity-icon-container">
+                        <i class="fas fa-file-upload activity-icon"></i>
+                    </div>
+                    <div class="activity-content">
+                        <p class="activity-text">Uploaded <span class="activity-highlight">Medical Report.pdf</span></p>
+                        <p class="activity-date">3 days ago</p>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon-container">
+                        <i class="fas fa-share-alt activity-icon"></i>
+                    </div>
+                    <div class="activity-content">
+                        <p class="activity-text">Shared <span class="activity-highlight">X-Ray Scan.png</span> with Dr. Smith</p>
+                        <p class="activity-date">1 week ago</p>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-icon-container">
+                        <i class="fas fa-file-download activity-icon"></i>
+                    </div>
+                    <div class="activity-content">
+                        <p class="activity-text">Downloaded <span class="activity-highlight">Prescription.jpg</span></p>
+                        <p class="activity-date">2 weeks ago</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Document Modal -->
+    <div id="documentModal">
+        <div class="modal-overlay" onclick="closeDocument()"></div>
+        <div class="modal-content glass-card">
+            <button class="modal-close" onclick="closeDocument()" style="position: absolute; top: 1.5rem; right: 1.5rem; background: rgba(0,0,0,0.3); border: none; width: 2.5rem; height: 2.5rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.3s;">
+                <i class="fas fa-times" style="font-size: 1.25rem;"></i>
+            </button>
+            
+            <div class="modal-body">
+                <div class="document-preview-container">
+                    <div class="preview-placeholder" style="position: relative; overflow: hidden; border-radius: 0.5rem;">
+                        <div id="documentPreview" style="text-align: center; padding: 2rem; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
+                            <!-- Document preview will be shown here -->
+                        </div>
+                        <div style="position: absolute; inset: 0; background: linear-gradient(135deg, rgba(0,238,255,0.1) 0%, rgba(2,6,23,0.8) 100%); z-index: -1;"></div>
+                    </div>
+                    
+                    <div class="document-info">
+                        <div>
+                            <h2 id="documentName" class="document-title"></h2>
+                            <p id="documentInfo" class="document-meta-info"></p>
+                        </div>
+                        <div class="document-actions">
+                            <button class="action-btn download-btn">
+                                <i class="fas fa-download" style="margin-right: 0.5rem;"></i> Download
+                            </button>
+                            <button class="action-btn share-btn">
+                                <i class="fas fa-share-alt" style="margin-right: 0.5rem;"></i> Share
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="sidebar">
+                    <div class="sidebar-section glass-card">
+                        <h3 class="sidebar-title">Document Details</h3>
+                        <div class="details-list">
+                            <div class="detail-item">
+                                <span class="detail-label">Type:</span>
+                                <span id="documentType"></span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Size:</span>
+                                <span id="documentSize"></span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Uploaded:</span>
+                                <span id="documentDate"></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="sidebar-section glass-card">
+                        <h3 class="sidebar-title">Actions</h3>
+                        <div class="actions-list">
+                            <button class="full-width-btn analyse-btn">
+                                <i class="fas fa-chart-line" style="margin-right: 0.5rem;"></i> Analyse
+                            </button>
+                            <button class="full-width-btn delete-btn" onclick="deleteDocument()">
+                                <i class="fas fa-trash" style="margin-right: 0.5rem;"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="sidebar-section glass-card">
+                        <h3 class="sidebar-title">Tags</h3>
+                        <div class="tags-container">
+                            <span class="tag">Medical</span>
+                            <span class="tag">Report</span>
+                            <span class="tag">2023</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Document modal functionality
+        function openDocument(name, type) {
+            const modal = document.getElementById('documentModal');
+            const preview = document.getElementById('documentPreview');
+            const docName = document.getElementById('documentName');
+            const docInfo = document.getElementById('documentInfo');
+            const docType = document.getElementById('documentType');
+            const docSize = document.getElementById('documentSize');
+            const docDate = document.getElementById('documentDate');
+            
+            // Set document info
+            docName.textContent = name;
+            docInfo.textContent = `${getFileSize(name)} • ${getFileDate(name)}`;
+            docType.textContent = type.toUpperCase();
+            docSize.textContent = getFileSize(name);
+            docDate.textContent = getFileDate(name);
+            
+            // Set preview based on file type
+            preview.innerHTML = '';
+            if (type === 'pdf') {
+                preview.innerHTML = `
+                    <div style="background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 50%; margin-bottom: 2rem;">
+                        <i class="fas fa-file-pdf pdf-icon" style="font-size: 4rem;"></i>
+                    </div>
+                    <h3 style="font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem;">${name.split('.')[0]}</h3>
+                    <p style="font-size: 1rem; opacity: 0.8; margin-bottom: 1.5rem;">PDF Document</p>
+                    <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                        <div style="background: rgba(0,238,255,0.2); padding: 0.5rem 1rem; border-radius: 2rem; font-size: 0.9rem;">
+                            <i class="fas fa-file-alt" style="margin-right: 0.5rem;"></i> ${getFileSize(name)}
+                        </div>
+                        <div style="background: rgba(0,238,255,0.2); padding: 0.5rem 1rem; border-radius: 2rem; font-size: 0.9rem;">
+                            <i class="fas fa-calendar" style="margin-right: 0.5rem;"></i> ${getFileDate(name)}
+                        </div>
+                    </div>
+                `;
+            } else if (type === 'png' || type === 'jpg' || type === 'jpeg') {
+                preview.innerHTML = `
+                    <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+                        <div style="position: relative; max-width: 100%; max-height: 100%;">
+                            <img src="https://placehold.co/800x600/0f172a/0ef?text=${encodeURIComponent(name.split('.')[0])}"
+                                alt="${name}" style="max-height: 60vh; max-width: 100%; border-radius: 0.5rem; box-shadow: 0 10px 20px rgba(0,0,0,0.3);">
+                            <div style="position: absolute; bottom: -1.5rem; left: 50%; transform: translateX(-50%); background: rgba(0,238,255,0.2); backdrop-filter: blur(10px); padding: 0.75rem 1.5rem; border-radius: 2rem; display: flex; gap: 1rem; align-items: center;">
+                                <i class="fas fa-image" style="color: var(--primary);"></i>
+                                <span>${type.toUpperCase()} • ${getFileSize(name)}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeDocument() {
+            const modal = document.getElementById('documentModal');
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        
+        function deleteDocument() {
+            const docName = document.getElementById('documentName').textContent;
+            if (confirm(`Are you sure you want to delete "${docName}"?`)) {
+                alert(`"${docName}" has been deleted.`);
+                closeDocument();
+            }
+        }
+        
+        // Helper functions for demo purposes
+        function getFileSize(name) {
+            // This is just for demo - in a real app you would get this from the file metadata
+            const sizes = {
+                'Medical Report.pdf': '2.4 MB',
+                'X-Ray Scan.png': '1.8 MB',
+                'Prescription.jpg': '0.9 MB',
+                'Lab Results.jpeg': '3.2 MB',
+                'Insurance.pdf': '4.1 MB',
+                'MRI Scan.png': '5.7 MB',
+                'Blood Test.jpg': '1.2 MB',
+                'Vaccination Record.pdf': '2.9 MB',
+                'Ultrasound.jpeg': '3.5 MB',
+                'Dental Records.pdf': '1.7 MB'
+            };
+            return sizes[name] || '1.0 MB';
+        }
+        
+        function getFileDate(name) {
+            // This is just for demo - in a real app you would get this from the file metadata
+            const dates = {
+                'Medical Report.pdf': '3 days ago',
+                'X-Ray Scan.png': '1 week ago',
+                'Prescription.jpg': '2 weeks ago',
+                'Lab Results.jpeg': '1 month ago',
+                'Insurance.pdf': '2 months ago',
+                'MRI Scan.png': '3 months ago',
+                'Blood Test.jpg': '4 months ago',
+                'Vaccination Record.pdf': '5 months ago',
+                'Ultrasound.jpeg': '6 months ago',
+                'Dental Records.pdf': '7 months ago'
+            };
+            return dates[name] || 'Recently';
+        }
+        
+        // Close modal when pressing ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeDocument();
+            }
+        });
+    </script>
+</body>
+</html>
