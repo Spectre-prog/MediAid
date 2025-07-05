@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MediAid - Personal Health Dashboard</title>
     <style>
-        /* Root variables from prompt */
+        
         :root {
             --color-1: #0ef;
             --color-2: #08c;
@@ -71,24 +71,24 @@
             }
         }
 
-        /* Floating bubbles animation */
+        /* Bubble Background Animation */
         .bubbles {
             position: fixed;
             width: 100%;
             height: 100%;
+            z-index: -1;
             overflow: hidden;
             top: 0;
             left: 0;
-            z-index: -1;
         }
 
         .bubble {
             position: absolute;
             bottom: -100px;
-            background: var(--primary);
+            background: var(--color-8);
             border-radius: 50%;
-            opacity: 0.2;
-            animation: rise 10s infinite ease-in;
+            opacity: 0.5;
+            animation: rise 15s infinite ease-in;
         }
 
         .bubble:nth-child(1) {
@@ -96,6 +96,7 @@
             height: 40px;
             left: 10%;
             animation-duration: 8s;
+            background: var(--color-9);
         }
 
         .bubble:nth-child(2) {
@@ -104,6 +105,7 @@
             left: 20%;
             animation-duration: 5s;
             animation-delay: 1s;
+            background: var(--color-17);
         }
 
         .bubble:nth-child(3) {
@@ -112,6 +114,7 @@
             left: 35%;
             animation-duration: 7s;
             animation-delay: 2s;
+            background: var(--color-18);
         }
 
         .bubble:nth-child(4) {
@@ -120,6 +123,7 @@
             left: 50%;
             animation-duration: 11s;
             animation-delay: 0s;
+            background: var(--color-8);
         }
 
         .bubble:nth-child(5) {
@@ -128,6 +132,7 @@
             left: 55%;
             animation-duration: 6s;
             animation-delay: 1s;
+            background: var(--color-9);
         }
 
         .bubble:nth-child(6) {
@@ -136,6 +141,7 @@
             left: 65%;
             animation-duration: 8s;
             animation-delay: 3s;
+            background: var(--color-17);
         }
 
         .bubble:nth-child(7) {
@@ -144,6 +150,7 @@
             left: 75%;
             animation-duration: 7s;
             animation-delay: 2s;
+            background: var(--color-18);
         }
 
         .bubble:nth-child(8) {
@@ -152,6 +159,25 @@
             left: 80%;
             animation-duration: 6s;
             animation-delay: 1s;
+            background: var(--color-8);
+        }
+
+        .bubble:nth-child(9) {
+            width: 15px;
+            height: 15px;
+            left: 70%;
+            animation-duration: 9s;
+            animation-delay: 0s;
+            background: var(--color-9);
+        }
+
+        .bubble:nth-child(10) {
+            width: 50px;
+            height: 50px;
+            left: 85%;
+            animation-duration: 5s;
+            animation-delay: 3s;
+            background: var(--color-17);
         }
 
         @keyframes rise {
@@ -168,11 +194,12 @@
             }
         }
 
+
         /* Glass morphism effect */
         .glass-card {
             background: var(--glass);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(16px);
             border-radius: 10px;
             border: 1px solid var(--glass-border);
             box-shadow: 0 8px 32px 0 var(--color-14);
@@ -214,27 +241,38 @@
             gap: 15px;
         }
 
-        .btn {
-            padding: 10px 20px;
-            border-radius: 30px;
-            border: none;
+         .btn {
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            letter-spacing: 1px;
+            border: none;
+            outline: none;
         }
 
         .btn-primary {
             background: var(--primary);
             color: var(--darker);
+            box-shadow: 0 0 15px var(--color-8);
         }
 
         .btn-primary:hover {
             background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px var(--color-8);
+            transform: translateY(-3px);
+            box-shadow: 0 0 20px var(--color-9);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--light);
+            border: 1px solid var(--glass-border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--glass);
+            transform: translateY(-3px);
         }
 
         .btn-outline {
@@ -387,9 +425,16 @@
 
         .dashboard-section {
             background: var(--glass);
-            border-radius: 15px;
-            padding: 20px;
             border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 15px var(--color-10);
+            transition: transform 0.3s ease;
+            border: 1px solid var(--glass-border);
+            
         }
 
         .section-header {
@@ -399,6 +444,8 @@
             margin-bottom: 20px;
             padding-bottom: 10px;
             border-bottom: 1px solid var(--glass-border);
+            box-shadow: 0 5px 15px var(--color-10);
+
         }
 
         .section-header h2 {
@@ -809,6 +856,7 @@
             </div>
         </nav>
         <!-- Ugoeze, when you get here, you will clear this deafult contents as the user has not uploaded any -->
+         <!-- dvkdvniik -->
         <div class="dashboard">
             <h1>Health Dashboard</h1>
             <p>Welcome back, John. Here's an overview of your health records.</p>
@@ -1087,7 +1135,7 @@
                         <div style="text-align: center;">
                             <h3>MRI SCAN REPORT</h3>
                             <p>Scanned on: ${new Date().toLocaleDateString()}</p>
-                            <div style="margin: 20px auto; width: 200px; height: 150px; background: linear-gradient(135deg, #333, #666);"></div>
+                            <img src="../static/img/icons8-file-explorer-48.png" style="margin: 20px auto; width: 200px; height: 19rem">
                             <p>Findings: No abnormalities detected</p>
                             <p>Impression: Normal study</p>
                         </div>
@@ -1098,7 +1146,7 @@
                         <div style="text-align: center;">
                             <h3>CHEST X-RAY</h3>
                             <p>Dated: ${new Date().toLocaleDateString()}</p>
-                            <div style="margin: 20px auto; width: 200px; height: 150px; background: linear-gradient(135deg, #444, #888);"></div>
+                            <img src="../static/img/new.png" style="margin: 20px auto; width: 200px; height: 7rem';">
                             <p>Findings: Lungs clear, no active disease</p>
                             <p>Cardiac silhouette normal</p>
                         </div>
@@ -1106,8 +1154,8 @@
                     break;
                 default:
                     content = `
-                        <p>This is a preview of "${docName}". In a real application, this would display the actual document.</p>
-                        <p>You can click "Analyze" to get AI-powered insights about this document.</p>
+                        <img src="../static/img/icons8-file-explorer-48.png">
+                        <p>This is a preview of "${docName}". 
                     `;
             }
             
@@ -1142,7 +1190,7 @@
                 addMessage(message, true);
                 aiInput.value = '';
                 
-                // Simulate AI response
+                // Simulate AI responseI want you to act as an academic journal editor. Please rephrase the paragraph from an academic angle based on the writting style of the Science journal: 
                 setTimeout(() => {
                     const responses = [
                         "I've reviewed your health records and everything looks good overall.",

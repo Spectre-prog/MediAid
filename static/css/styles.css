@@ -10,13 +10,19 @@
 }
 
 @keyframes gradientBG {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background-color: var(--black);
   margin: 0;
   padding: 0;
@@ -27,7 +33,7 @@ body {
 
 /* Guys lemme know what you think about this background */
 body::before {
-  content: '';
+  content: "";
   position: fixed;
   top: 0;
   left: 0;
@@ -40,13 +46,11 @@ body::before {
   opacity: 0.8;
 }
 
-
 .cont {
   max-width: 500px;
   margin: 2rem auto;
   padding: 20px;
 }
-
 
 h2 {
   color: var(--white);
@@ -57,7 +61,7 @@ h2 {
 
 .auth-form {
   background: var(--glass);
-    -webkit-backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   padding: 30px;
   border-radius: 12px;
@@ -93,7 +97,7 @@ select {
   color: var(--white);
 }
 
-input:focus, 
+input:focus,
 select:focus {
   border-color: var(--primary);
   outline: none;
@@ -207,7 +211,7 @@ button[type="submit"]:hover {
   margin-top: 25px;
   border-radius: 8px;
   border: 1px dashed var(--primary);
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
   text-align: left;
   color: var(--primary);
 }
@@ -224,8 +228,14 @@ button[type="submit"]:hover {
 
 /* Animation for form elements */
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .form-group {
@@ -233,11 +243,21 @@ button[type="submit"]:hover {
   opacity: 0;
 }
 
-.form-group:nth-child(1) { animation-delay: 0.1s; }
-.form-group:nth-child(2) { animation-delay: 0.2s; }
-.form-group:nth-child(3) { animation-delay: 0.3s; }
-.form-group:nth-child(4) { animation-delay: 0.4s; }
-.form-group:nth-child(5) { animation-delay: 0.5s; }
+.form-group:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.form-group:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.form-group:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.form-group:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.form-group:nth-child(5) {
+  animation-delay: 0.5s;
+}
 
 /* Responsive adjustments */
 @media (max-width: 600px) {
@@ -245,15 +265,23 @@ button[type="submit"]:hover {
     padding: 15px;
     margin: 1rem auto;
   }
-  
+
   .auth-form {
     padding: 20px;
   }
-  
-  input, select, button {
+
+  input,
+  button {
     padding: 12px;
+    color: white;
+    cursor: pointer;
   }
-  
+
+  .select {
+    padding: 2rem;
+    cursor: pointer;
+  }
+
   h1 {
     font-size: 1.8rem;
   }
